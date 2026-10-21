@@ -1,0 +1,227 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blocs d'assolement</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --papier:#f3f4f1; --surface:#fff; --surface-2:#e8ebe6; --trait:#d3d8d0;
+  --encre:#232a26; --encre-2:#5d6b62; --alerte:#c1502e; --vert:#4a7c52;
+  --t-brique:#c0725c; --t-teal:#3f9a86; --t-prune:#7d4a62; --t-violet:#8b7fc4;
+  --t-olive:#8a9a52; --t-bleu:#6e8fc0; --t-sauge:#7fa06a; --t-amber:#c9962f;
+  --t-paille:#a8913d; --t-rose2:#c2607f; --t-rose:#d4759a; --t-ardoise:#8d9a94;
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){
+  --papier:#15191a; --surface:#1d2224; --surface-2:#252b2d; --trait:#343c3e;
+  --encre:#e8ece9; --encre-2:#9fada6; --alerte:#e0714a; --vert:#7fb98a;
+  --t-brique:#d98f78; --t-teal:#58b8a2; --t-prune:#b3819a; --t-violet:#a89ee0;
+  --t-olive:#a7b86c; --t-bleu:#8fabd8; --t-sauge:#9cbd86; --t-amber:#e0b254;
+  --t-paille:#d4bb68; --t-rose2:#e08aa4; --t-rose:#e894b4; --t-ardoise:#8aa2ae;
+}}
+*{box-sizing:border-box}
+body{margin:0;padding:24px 16px 60px;background:var(--papier);color:var(--encre);
+  font:400 15px/1.5 Barlow,system-ui,sans-serif}
+.page{max-width:1280px;margin:0 auto}
+h1{font:600 30px/1.1 'Barlow Condensed',sans-serif;margin:0 0 2px}
+.chapo{color:var(--encre-2);margin:0 0 20px;font-size:14px}
+.col{display:grid;grid-template-columns:1fr 390px;gap:20px;align-items:start}
+@media(max-width:940px){.col{grid-template-columns:1fr}}
+.carte{background:var(--surface);border:1px solid var(--trait);border-radius:11px}
+.bloc{border-bottom:1px solid var(--trait);cursor:pointer}
+.bloc:last-child{border-bottom:0}
+.bloc:hover{background:var(--surface-2)}
+.bloc.on{background:var(--surface-2);box-shadow:inset 3px 0 0 var(--alerte)}
+.tete{display:flex;gap:12px;align-items:baseline;padding:11px 14px}
+.tete b{font:600 17px/1.2 Barlow,sans-serif;flex:0 0 118px}
+.fams{flex:1;display:flex;gap:5px;flex-wrap:wrap}
+.pastille{font:500 11px/1 Barlow,sans-serif;padding:3px 7px;border-radius:20px;
+  color:#fff;white-space:nowrap}
+.chiffre{font:500 13px/1 'IBM Plex Mono',monospace;color:var(--encre-2);
+  white-space:nowrap}
+.chiffre b{color:var(--encre);font-weight:600}
+.detail{display:none;padding:0 14px 12px 144px}
+.bloc.on .detail{display:block}
+.cult{display:flex;gap:10px;font:400 13px/1.7 Barlow,sans-serif;color:var(--encre-2)}
+.cult span:first-child{flex:1;color:var(--encre)}
+.cult span{font-family:'IBM Plex Mono',monospace;font-size:12px}
+h2{font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--encre-2);margin:0;padding:13px 14px;
+  border-bottom:1px solid var(--trait)}
+.ligne{display:flex;gap:10px;align-items:baseline;padding:8px 14px;
+  border-bottom:1px solid var(--trait);font-size:14px}
+.ligne:last-child{border-bottom:0}
+.ligne b{flex:1;font-weight:500}
+.ligne .ok{color:var(--vert);font:500 12px 'IBM Plex Mono',monospace}
+.ligne .ko{color:var(--alerte);font:500 12px 'IBM Plex Mono',monospace}
+.ligne .m{font:400 12px 'IBM Plex Mono',monospace;color:var(--encre-2)}
+.vide{padding:18px 14px;color:var(--encre-2);font-size:14px}
+.err{background:var(--surface);border:1px solid var(--alerte);border-radius:11px;
+  padding:18px 20px;color:var(--encre)}
+.err h3{margin:0 0 8px;font:600 17px Barlow,sans-serif;color:var(--alerte)}
+.err code{font:400 13px 'IBM Plex Mono',monospace;background:var(--surface-2);
+  padding:2px 5px;border-radius:4px}
+.err ol{margin:10px 0 0;padding-left:20px;line-height:1.7}
+</style>
+<div class="page">
+<h1>Blocs d'assolement</h1>
+<p class="chapo" id="chapo">Chargement…</p>
+<div id="erreur"></div>
+<div class="col">
+  <div class="carte" id="blocs"></div>
+  <div class="carte" id="ou"><h2>Où le poser</h2><div class="vide">Choisis un bloc à gauche.</div></div>
+</div>
+</div>
+<script>
+const URL_SB = 'https://oldkmapumqnibdcniecd.supabase.co';
+const CLE = 'sb_publishable_sMySTPpkgaiUtnban8uCtw_HQFxmsgv';
+const TEINTE = {'chénopodiacées':'brique','composée':'teal','convolvulacées':'prune',
+  'crucifère':'violet','cucurbitacée':'olive','lilliacée':'bleu','légumineuse':'sauge',
+  'ombellifère':'amber','graminée':'paille','rosacée':'rose2','solanacée':'rose',
+  'labiée':'teal','autre':'ardoise'};
+const MOIS = ['janv','févr','mars','avr','mai','juin','juil','août','sept','oct','nov','déc'];
+
+//  PostgREST ne sert que les schemas exposes. Celui-ci s'appelle production,
+//  d'ou l'en-tete Accept-Profile sur chaque appel.
+async function pg(chemin) {
+  const r = await fetch(`${URL_SB}/rest/v1/${chemin}`,
+    {headers: {apikey: CLE, Authorization: 'Bearer ' + CLE, 'Accept-Profile': 'production'}});
+  if (!r.ok) throw Object.assign(new Error(await r.text()), {code: r.status});
+  return r.json();
+}
+
+function jour(d) {
+  if (!d) return null;
+  const x = new Date(d + 'T00:00:00Z');
+  return x.getUTCDate() + ' ' + MOIS[x.getUTCMonth()];
+}
+const f0 = n => Math.round(n).toLocaleString('fr-FR');
+
+let D = null, choisi = null;
+
+async function charger() {
+  const [groupes, cultures, releves, parcelles] = await Promise.all([
+    pg('groupe_assolement?select=id,nom_court&order=nom_court'),
+    pg('culture?select=id,code,numero_semis,date_semis_prevue,date_plantation_prevue,'
+      + 'debut_recolte_prevu,fin_recolte_prevue,groupe_assolement_id,'
+      + 'legume(nom,famille_botanique(nom,delai_retour_annees)),'
+      + 'affectation(longueur_m,parcelle_id)&limit=2000'),
+    pg('assolement_releve?select=annee,parcelle_id,planche_debut,planche_fin,'
+      + 'est_engrais_vert,famille_botanique(nom)&limit=2000'),
+    //  La vue agrege les 1 498 planches en 31 lignes. L'API plafonne a 1 000
+    //  lignes par requete : les demander une par une donnerait des metres
+    //  faux, et silencieusement.
+    pg('v_parcelle_metrique?select=parcelle_id,nom,ilot,hors_rotation,'
+       + 'nb_planches,longueur_totale_m&order=nom')
+  ]);
+
+  const parc = new Map(parcelles.map(p => [p.parcelle_id,
+    {...p, m: +p.longueur_totale_m, nb: p.nb_planches, hist: new Map()}]));
+  //  Derniere annee ou chaque famille est passee sur la parcelle. Un engrais
+  //  vert ou une luzerne ne compte pas : c'est la coupure, pas un retour.
+  for (const r of releves) {
+    const p = parc.get(r.parcelle_id), f = r.famille_botanique && r.famille_botanique.nom;
+    if (!p || !f || r.est_engrais_vert) continue;
+    p.hist.set(f, Math.max(p.hist.get(f) || 0, r.annee));
+  }
+
+  const blocs = groupes.map(g => ({...g, cultures: [], fams: new Map(), m: 0,
+                                   debut: null, fin: null, ou: new Map()}));
+  const parId = new Map(blocs.map(b => [b.id, b]));
+  const orphelins = {id: null, nom_court: 'Sans bloc', cultures: [], fams: new Map(),
+                     m: 0, debut: null, fin: null, ou: new Map()};
+  for (const c of cultures) {
+    const b = parId.get(c.groupe_assolement_id) || orphelins;
+    const f = c.legume && c.legume.famille_botanique;
+    b.cultures.push(c);
+    if (f) b.fams.set(f.nom, f.delai_retour_annees);
+    for (const a of c.affectation || []) {
+      b.m += +a.longueur_m;
+      if (a.parcelle_id) b.ou.set(a.parcelle_id, (b.ou.get(a.parcelle_id) || 0) + +a.longueur_m);
+    }
+    const d = [c.date_semis_prevue, c.date_plantation_prevue].filter(Boolean).sort()[0];
+    const f2 = [c.fin_recolte_prevue, c.debut_recolte_prevu].filter(Boolean).sort().pop();
+    if (d && (!b.debut || d < b.debut)) b.debut = d;
+    if (f2 && (!b.fin || f2 > b.fin)) b.fin = f2;
+  }
+  if (orphelins.cultures.length) blocs.push(orphelins);
+  blocs.sort((a, b) => b.m - a.m || b.cultures.length - a.cultures.length);
+  D = {blocs, parc, annee: Math.max(...releves.map(r => r.annee))};
+}
+
+function rendu() {
+  document.getElementById('chapo').textContent =
+    `${D.blocs.length} blocs · ${D.blocs.reduce((s, b) => s + b.cultures.length, 0)} cultures · `
+    + `${f0(D.blocs.reduce((s, b) => s + b.m, 0))} m affectés`;
+  document.getElementById('blocs').innerHTML = D.blocs.map((b, i) => {
+    const fams = [...b.fams.keys()];
+    const cult = b.cultures.slice().sort((x, y) =>
+      (x.legume.nom).localeCompare(y.legume.nom)).map(c =>
+      `<div class="cult"><span>${c.legume.nom}${c.numero_semis ? ' ' + c.numero_semis : ''}</span>`
+      + `<span>${jour(c.date_plantation_prevue || c.date_semis_prevue) || '—'}</span>`
+      + `<span>${f0((c.affectation || []).reduce((s, a) => s + +a.longueur_m, 0))} m</span></div>`).join('');
+    const ou = [...b.ou.entries()].sort((x, y) => y[1] - x[1])
+      .map(([id, m]) => `${D.parc.get(id) ? D.parc.get(id).nom : '?'}\u202f(${f0(m)}\u202fm)`).join(' · ');
+    return `<div class="bloc${i === choisi ? ' on' : ''}" data-i="${i}">
+      <div class="tete"><b>${b.nom_court}</b>
+        <span class="fams">${fams.map(f =>
+          `<i class="pastille" style="background:var(--t-${TEINTE[f] || 'ardoise'})">${f}</i>`).join('')}
+        </span>
+        <span class="chiffre">${b.cultures.length} cult.</span>
+        <span class="chiffre"><b>${f0(b.m)} m</b></span>
+        <span class="chiffre">${b.debut ? jour(b.debut) + ' → ' + (jour(b.fin) || '?') : '—'}</span>
+      </div>
+      <div class="detail">${cult}${ou ? `<div class="cult" style="margin-top:7px">
+        <span style="color:var(--encre-2)">Posé sur&nbsp;: ${ou}</span></div>` : ''}</div>
+    </div>`;
+  }).join('');
+}
+
+function rendrePlaces() {
+  const el = document.getElementById('ou');
+  if (choisi === null) return;
+  const b = D.blocs[choisi], fams = [...b.fams.keys()];
+  const lignes = [...D.parc.values()].filter(p => !p.hors_rotation).map(p => {
+    let pire = null;
+    for (const f of fams) {
+      const a = p.hist.get(f);
+      if (a && (!pire || a > pire.a)) pire = {f, a};
+    }
+    const delai = pire ? (b.fams.get(pire.f) || 4) : 0;
+    const libre = !pire || (D.annee + 1 - pire.a) >= delai;
+    return {p, pire, libre, assez: p.m >= b.m};
+  }).sort((x, y) => (y.libre - x.libre) || (y.assez - x.assez) || (y.p.m - x.p.m));
+  //  Un gros bloc se pose sur plusieurs parcelles : la question n'est pas
+  //  "laquelle le contient" mais "ai-je assez de place libre en tout".
+  const libreTotal = lignes.filter(l => l.libre).reduce((s, l) => s + l.p.m, 0);
+  el.innerHTML = `<h2>Où poser « ${b.nom_court} » en ${D.annee + 1}</h2>`
+    + `<div class="ligne" style="font-size:13px">
+         <b>${f0(b.m)} m à placer · ${fams.join(', ') || 'sans famille'}</b>
+         <span class="${libreTotal >= b.m ? 'ok' : 'ko'}">${f0(libreTotal)} m libres</span></div>`
+    + lignes.map(l => `<div class="ligne"><b>${l.p.nom}</b>
+        <span class="m">${f0(l.p.m)} m${l.libre && l.assez ? ' · tout' : ''}</span>
+        <span class="${l.libre ? 'ok' : 'ko'}">${l.libre ? 'libre'
+          : l.pire.f + ' en ' + l.pire.a}</span></div>`).join('');
+}
+
+document.getElementById('blocs').addEventListener('click', e => {
+  const b = e.target.closest('.bloc'); if (!b) return;
+  choisi = choisi === +b.dataset.i ? null : +b.dataset.i;
+  rendu(); rendrePlaces();
+  if (choisi === null) document.getElementById('ou').innerHTML =
+    '<h2>Où le poser</h2><div class="vide">Choisis un bloc à gauche.</div>';
+});
+
+charger().then(() => rendu()).catch(e => {
+  document.getElementById('chapo').textContent = '';
+  const schema = /schema|does not exist|PGRST106|not find/i.test(e.message || '');
+  document.getElementById('erreur').innerHTML = `<div class="err">
+    <h3>${schema ? 'Le schéma production n’est pas exposé' : 'La base n’a pas répondu'}</h3>
+    ${schema ? `<p>Les tables sont dans le schéma <code>production</code>, que l’API
+      ne sert pas par défaut. Dans Supabase&nbsp;:</p>
+      <ol><li>Settings → <b>Data API</b></li>
+      <li>Champ <b>Exposed schemas</b></li>
+      <li>Ajouter <code>production</code> à côté de <code>public</code></li>
+      <li>Enregistrer, puis recharger cette page</li></ol>`
+      : `<p>Message reçu&nbsp;:</p>`}
+    <p><code>${(e.message || e).toString().slice(0, 300)}</code></p></div>`;
+});
+</script>
