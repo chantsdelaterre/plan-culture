@@ -1,0 +1,162 @@
+3 ; 19 ; ouest
+2026 ; 3 ; 1 ; 19 ; ; Haricots
+
+2 ; 19 ; ouest
+2026 ; 2 ; 11 ; 19 ; 9 ; Haricots
+2026 ; 2 ; 1 ; 10 ; 10 ; Blettes
+
+1 ; 12 ; ouest
+2026 ; 1 ; 6 ; 11 ; 6 ; Bett. Rouge
+2026 ; 1 ; 1 ; 5 ; 5 ; Epinard
+2026 ; 1 ; 1 ; 11 ; 11 ; Haricots
+
+6 ; 19 ; ouest
+2026 ; 6 ; 1 ; 19 ; ; Petit Pois + Mangetout
+2026 ; 6 ; 17 ; 19 ; 3 ; Choux Plume
+2026 ; 6 ; 15 ; 16 ; ; Passage
+2026 ; 6 ; 10 ; 14 ; 5 ; Choux Plume
+2026 ; 6 ; 1 ; 9 ; 8 ; Choux Bruxelles
+
+5 ; 19 ; ouest
+2026 ; 5 ; 3 ; 19 ; 17 ; PdT Précoces
+2026 ; 5 ; 1 ; 2 ; 2 ; Mangetout
+
+4 ; 19 ; ouest
+2026 ; 4 ; 1 ; 19 ; ; Haricots
+
+Bruno Est 180m ; 61 ; nord
+2026 ; Bruno Est 180m ; 1 ; 18 ; 18 ; Patates Douces
+2026 ; Bruno Est 180m ; 19 ; 20 ; ; Passage
+2026 ; Bruno Est 180m ; 21 ; 30 ; 10 ; Pastèques
+2026 ; Bruno Est 180m ; 31 ; 32 ; ; Passage
+2026 ; Bruno Est 180m ; 33 ; 59 ; 27 ; Choux Automne
+2026 ; Bruno Est 180m ; 60 ; 61 ; 2 ; Betterave Rouges
+
+Bruno Ouest 180m ; 28 ; nord
+2026 ; Bruno Ouest 180m ; 1 ; 27 ; 27 ; Poireaux
+
+Bruno Ouest 90m ; 33 ; nord
+2026 ; Bruno Ouest 90m ; 29 ; 61 ; ; Choux Automne
+
+R1 (nord est) ; 111 ; nord
+2026 ; R1 (nord est) ; 96 ; 111 ; 10 ; Courgettes
+2026 ; R1 (nord est) ; 93 ; 95 ; ; Passage
+2026 ; R1 (nord est) ; 76 ; 92 ; 10 ; Courgettes
+2026 ; R1 (nord est) ; 73 ; 75 ; ; Passage
+2026 ; R1 (nord est) ; 67 ; 72 ; 3 ; Courgettes
+2026 ; R1 (nord est) ; 63 ; 66 ; 2 ; Radis Rose
+2026 ; R1 (nord est) ; 37 ; 62 ; 20 ; Carottes
+2026 ; R1 (nord est) ; 35 ; 36 ; 1 ; Radis Rose
+2026 ; R1 (nord est) ; 33 ; 34 ; 2 ; Coriandre Aneth
+2026 ; R1 (nord est) ; 30 ; 32 ; 2 ; Persil
+2026 ; R1 (nord est) ; 26 ; 29 ; 3 ; Coriandre-Aneth
+2026 ; R1 (nord est) ; 1 ; 25 ; 9 ; Persil
+2026 ; R1 (nord est) ; 96 ; 111 ; 10 ; Radis Red Meat
+
+R2 (nord ouest) ; 91 ; nord
+2026 ; R2 (nord ouest) ; 38 ; 91 ; 46 ; Carottes
+2026 ; R2 (nord ouest) ; 33 ; 37 ; 2 ; Radis Rose
+2026 ; R2 (nord ouest) ; 1 ; 32 ; 18 ; Carottes
+
+R3 (sud est) ; 91 ; nord
+2026 ; R3 (sud est) ; 1 ; 91 ; ; Luzerne
+
+R4 (sud ouest) ; 111 ; nord
+2026 ; R4 (sud ouest) ; 1 ; 111 ; ; Luzerne
+
+11 ; 65 ; nord
+2026 ; 11 ; 1 ; 65 ; 65 ; Salades
+2026 ; 11 ; 1 ; 22 ; 22 ; Potimarron
+2026 ; 11 ; 23 ; 24 ; ; Passage
+2026 ; 11 ; 25 ; 40 ; 16 ; Carottes Semences
+2026 ; 11 ; 41 ; 44 ; ; ?
+
+12 ; 5 ; ouest
+2026 ; 12 ; 1 ; 5 ; ; Choux Brocoli Semences
+2026 ; 12 ; 1 ; 5 ; ; Haricots
+
+13 ; 19 ; ouest
+2026 ; 13 ; 1 ; 5 ; 5 ; Basilic
+2026 ; 13 ; 6 ; 18 ; 13 ; Panais Semences
+
+14 ; 19 ; ouest
+2026 ; 14 ; 1 ; 19 ; ; Courges (Plantation + Nelson)
+
+15 ; 19 ; ouest
+2026 ; 15 ; 1 ; 2 ; 2,5 ; Potimarron
+2026 ; 15 ; 3 ; 19 ; 16,5 ; Pissenlit
+
+16 ; 19 ; ouest
+2026 ; 16 ; 1 ; 19 ; ; Carottes Semences
+2026 ; 16 ; 1 ; 10 ; 10 ; Poireaux
+
+17 ; 19 ; ouest
+2026 ; 17 ; 1 ; 19 ; ; Carottes Semence
+2026 ; 17 ; 1 ; 3 ; 3 ; Pain de Sucre
+2026 ; 17 ; 4 ; 8 ; 5 ; Choux Chinois
+2026 ; 17 ; 9 ; 11 ; ; Choux Pak Choi
+2026 ; 17 ; 12 ; 15 ; 4 ; Choux Chinois
+2026 ; 17 ; 16 ; 17 ; 2 ; Scarole
+2026 ; 17 ; 18 ; 18 ; 1 ; Choggia
+2026 ; 17 ; 19 ; 19 ; 1 ; Choux Rave
+
+Etang ; 38 ; ouest
+2026 ; Etang ; 1 ; 22 ; 22 ; OIGNONS, Échalottes
+2026 ; Etang ; 23 ; 38 ; 16 ; Choux de conservation
+
+F1 ; 111 ; sud
+2026 ; F1 ; 77 ; 111 ; 36 ; Choux printemps + Navet + Radis ?ster + Choux Rave + Pakchoï
+2026 ; F1 ; 57 ; 76 ; 20 ; Persil + Coriandre + Aneth
+2026 ; F1 ; 41 ; 56 ; 16 ; Céleri
+2026 ; F1 ; 39 ; 40 ; 2 ; Fenouil
+2026 ; F1 ; 11 ; 38 ; 28 ; Carottes (23 Pl) + Panais (5Pl)
+2026 ; F1 ; 1 ; 10 ; 10 ; Ombellifère Printemps
+2026 ; F1 ; 1 ; 8 ; 2 ; Epinard
+
+F2 ; 91 ; sud
+2026 ; F2 ; 90 ; 91 ; 2 ; Topi
+2026 ; F2 ; 89 ; 89 ; ; ciboulette
+2026 ; F2 ; 79 ; 88 ; 10 ; Radis rose
+2026 ; F2 ; 67 ; 78 ; 12 ; Radis d'hiver (Violet, Blanc)
+2026 ; F2 ; 62 ; 64 ; 3 ; Radis Blanc
+2026 ; F2 ; 59 ; 61 ; 3 ; Navets Violet
+2026 ; F2 ; 53 ; 58 ; 5 ; Navets Boule d'or
+2026 ; F2 ; 51 ; 52 ; ; Passage
+2026 ; F2 ; 46 ; 50 ; 5 ; Navets Boule d'or
+2026 ; F2 ; 42 ; 45 ; 3 ; Navet Violet
+2026 ; F2 ; 39 ; 41 ; 3 ; Radis Blanc
+2026 ; F2 ; 1 ; 36 ; 36 ; Courges (21 Butternut, 10 ? Kuri, 2,5 Spaghetti, 2,5 Sweet D.)
+
+F3 ; 91 ; sud
+2026 ; F3 ; 56 ; 91 ; 36 ; P. de T. Conservation
+2026 ; F3 ; 1 ; 35 ; 35 ; Salades
+
+F4 ; 111 ; sud
+2026 ; F4 ; 91 ; 111 ; 22 ; Butternut
+2026 ; F4 ; 64 ; 66 ; 3 ; Choux Plume
+2026 ; F4 ; 56 ; 63 ; 8 ; Choux Fleur Hiver
+2026 ; F4 ; 52 ; 55 ; ; Passage
+2026 ; F4 ; 40 ; 51 ; 12 ; Choux Fleur Aut.
+2026 ; F4 ; 38 ; 39 ; ; Passage
+2026 ; F4 ; 26 ; 37 ; 7 / 5 ; Brocoli Aut. / romanesco
+2026 ; F4 ; 6 ; 25 ; 20 ; Ail + Oignons Blanc + Echalotte + Oignons ?
+2026 ; F4 ; 3 ; 5 ; 3 ; Poivrons
+2026 ; F4 ; 1 ; 2 ; 2 ; Ciboule
+
+L.1 nord ; 50 ; ?
+2026 ; L.1 nord ; 1 ; 50 ; ; Courges Semis 2
+
+L.1 sud ; 50 ; ?
+2026 ; L.1 sud ; 1 ; 50 ; ; Betteraves Rouges
+
+L.2 est ; 22 ; ?
+2026 ; L.2 est ; 1 ; 22 ; 22 ; Pas de culture ; déclaré par Coco, pas de feuille
+
+L.2 ouest ; 22 ; ?
+2026 ; L.2 ouest ; 1 ; 22 ; 22 ; Pas de culture ; déclaré par Coco, pas de feuille
+
+Matt 1 ; 64 ; ?
+2026 ; Matt 1 ; 1 ; 64 ; 64 ; Pas de culture ; déclaré par Coco, pas de feuille
+
+Matt 2 ; 38 ; ?
+2026 ; Matt 2 ; 1 ; 38 ; 38 ; Pas de culture ; déclaré par Coco, pas de feuille

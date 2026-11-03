@@ -1,0 +1,93 @@
+Bruno Ouest 180m + 90m ; 61 ; ?
+2021 ; Bruno Ouest 180m + 90m ; 1 ; 29 ; ; Féverole
+
+Bruno Est 180m ; 61 ; nord
+2021 ; Bruno Est 180m ; 1 ; 29 ; ; Féverole
+
+F1 ; 112 ; sud
+2021 ; F1 ; 3 ; 50 ; ; Carotte Sativa
+2021 ; F1 ; 63 ; 65 ; ; Lolium
+2021 ; F1 ; 78 ; 112 ; ; Blé
+
+F2 ; 91 ; sud
+2021 ; F2 ; 1 ; 21 ; ; Blé / E.V C-L
+2021 ; F2 ; 22 ; 33 ; ; Epinard
+2021 ; F2 ; 34 ; 63 ; ; E.V C-L
+2021 ; F2 ; 64 ; 91 ; ; Betterave Sativa
+
+F3 ; 91 ; sud
+2021 ; F3 ; 1 ; 17 ; ; Panais Sativa
+2021 ; F3 ; 18 ; 40 ; ; E.V C-L
+2021 ; F3 ; 41 ; 50 ; ; Blé
+2021 ; F3 ; 51 ; 59 ; ; E.V C-L
+2021 ; F3 ; 60 ; 88 ; ; Féverole
+2021 ; F3 ; 89 ; 91 ; ; Blé
+
+1 ; 12 ; ouest
+2021 ; 1 ; 1 ; 12 ; 12 ; Luzerne ; déclaré par Coco, pas de feuille
+
+2 ; 19 ; ouest
+2021 ; 2 ; 1 ; 19 ; 19 ; Luzerne ; déclaré par Coco, pas de feuille
+
+3 ; 19 ; ouest
+2021 ; 3 ; 1 ; 19 ; 19 ; Luzerne ; déclaré par Coco, pas de feuille
+
+4 ; 19 ; ouest
+2021 ; 4 ; 1 ; 19 ; 19 ; Luzerne ; déclaré par Coco, pas de feuille
+
+5 ; 19 ; ouest
+2021 ; 5 ; 1 ; 19 ; 19 ; Luzerne ; déclaré par Coco, pas de feuille
+
+6 ; 19 ; ouest
+2021 ; 6 ; 1 ; 19 ; 19 ; Luzerne ; déclaré par Coco, pas de feuille
+
+11 ; 65 ; sud
+2021 ; 11 ; 1 ; 65 ; 65 ; Luzerne ; déclaré par Coco, pas de feuille
+
+12 ; 5 ; ouest
+2021 ; 12 ; 1 ; 5 ; 5 ; Luzerne ; déclaré par Coco, pas de feuille
+
+13 ; 19 ; ouest
+2021 ; 13 ; 1 ; 19 ; 19 ; Luzerne ; déclaré par Coco, pas de feuille
+
+14 ; 19 ; ouest
+2021 ; 14 ; 1 ; 19 ; 19 ; Luzerne ; déclaré par Coco, pas de feuille
+
+15 ; 19 ; ouest
+2021 ; 15 ; 1 ; 19 ; 19 ; Luzerne ; déclaré par Coco, pas de feuille
+
+16 ; 19 ; ouest
+2021 ; 16 ; 1 ; 19 ; 19 ; Luzerne ; déclaré par Coco, pas de feuille
+
+17 ; 19 ; ouest
+2021 ; 17 ; 1 ; 19 ; 19 ; Luzerne ; déclaré par Coco, pas de feuille
+
+L.1 nord ; 50 ; ?
+2021 ; L.1 nord ; 1 ; 50 ; 50 ; Luzerne ; déclaré par Coco, pas de feuille
+
+L.1 sud ; 50 ; ?
+2021 ; L.1 sud ; 1 ; 50 ; 50 ; Luzerne ; déclaré par Coco, pas de feuille
+
+L.2 est ; 22 ; ?
+2021 ; L.2 est ; 1 ; 22 ; 22 ; Luzerne ; déclaré par Coco, pas de feuille
+
+L.2 ouest ; 22 ; ?
+2021 ; L.2 ouest ; 1 ; 22 ; 22 ; Luzerne ; déclaré par Coco, pas de feuille
+
+Matt 1 ; 64 ; ?
+2021 ; Matt 1 ; 1 ; 64 ; 64 ; Luzerne ; déclaré par Coco, pas de feuille
+
+Matt 2 ; 38 ; ?
+2021 ; Matt 2 ; 1 ; 38 ; 38 ; Luzerne ; déclaré par Coco, pas de feuille
+
+R1 (nord est) ; 111 ; sud
+2021 ; R1 (nord est) ; 1 ; 111 ; 111 ; Divers légumes ; déclaré par Coco, pas de feuille
+
+R2 (nord ouest) ; 91 ; sud
+2021 ; R2 (nord ouest) ; 1 ; 91 ; 91 ; Divers légumes ; déclaré par Coco, pas de feuille
+
+R3 (sud est) ; 91 ; sud
+2021 ; R3 (sud est) ; 1 ; 91 ; 91 ; Divers légumes ; déclaré par Coco, pas de feuille
+
+R4 (sud ouest) ; 111 ; sud
+2021 ; R4 (sud ouest) ; 1 ; 111 ; 111 ; Divers légumes ; déclaré par Coco, pas de feuille

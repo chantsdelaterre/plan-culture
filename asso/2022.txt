@@ -1,0 +1,129 @@
+Bruno Ouest 180m + 90m ; 61 ; nord
+2022 ; Bruno Ouest 180m + 90m ; 1 ; 27 ; 27 ; Betteraves Semences
+2022 ; Bruno Ouest 180m + 90m ; 28 ; 39 ;  ; Blé
+2022 ; Bruno Ouest 180m + 90m ; 40 ; 61 ; 22 ; Carottes Semences
+2022 ; Bruno Ouest 180m + 90m ; 35 ; 61 ; 27 ; P. de Terre
+
+Bruno Est 180m ; 61 ; nord
+2022 ; Bruno Est 180m ; 1 ; 26 ; 26 ; Courgettes
+2022 ; Bruno Est 180m ; 28 ; 61 ; 34 ; P. de Terre
+2022 ; Bruno Est 180m ; 1 ; 39 ;  ; Blé
+2022 ; Bruno Est 180m ; 40 ; 61 ; 22 ; Carottes Semences
+
+11 ; 65 ; sud
+2022 ; 11 ; 1 ; 65 ;  ; Luzerne
+2022 ; 11 ; 1 ; 55 ;  ; Carottes
+2022 ; 11 ; 57 ; 65 ; 8 ; Epinard
+
+Etang ; 38 ; ouest
+2022 ; Etang ; 2 ; 16 ;  ; Oignons
+2022 ; Etang ; 17 ; 38 ; 16 ; Chéno (Blette, (Betteraves) Poirée)
+2022 ; Etang ; 1 ; 10 ; 10 ; Epinard
+2022 ; Etang ; 10 ; 38 ;  ; E.V. (P.V.B)
+
+F1 ; 112 ; sud
+2022 ; F1 ; 51 ; 52 ;  ; Fenouil
+2022 ; F1 ; 53 ; 62 ;  ; Carotte-Panais
+2022 ; F1 ; 63 ; 66 ;  ; Fenouil
+2022 ; F1 ; 67 ; 75 ;  ; Persil
+2022 ; F1 ; 89 ; 112 ; 24 ; Navet-Radis
+2022 ; F1 ; 1 ; 65 ;  ; E.V. (Fév.)
+2022 ; F1 ; 76 ; 88 ;  ; E.V. (Fév.)
+2022 ; F1 ; 89 ; 112 ;  ; E.V. (P.V.B.)
+
+F2 ; 91 ; sud
+2022 ; F2 ; 1 ; 25 ;  ; Salades
+2022 ; F2 ; 26 ; 48 ; 23 ; Patates Douces
+2022 ; F2 ; 49 ; 57 ; 9 ; Pastèques
+2022 ; F2 ; 58 ; 60 ; 3 ; Aubergines
+2022 ; F2 ; 61 ; 64 ; 4 ; Poivrons
+2022 ; F2 ; 84 ; 85 ; 2 ; Choux Kale Semence
+2022 ; F2 ; 86 ; 91 ; 6 ; Pissenlit
+2022 ; F2 ; 1 ; 57 ;  ; E.V. (Fév.)
+2022 ; F2 ; 65 ; 83 ;  ; E.V. (Fév.)
+
+F3 ; 91 ; sud
+2022 ; F3 ; 5 ; 16 ;  ; Oignon Ail (1)
+2022 ; F3 ; 19 ; 38 ; 20 ; carottes
+2022 ; F3 ; 39 ; 40 ;  ; Radis Rose
+2022 ; F3 ; 46 ; 91 ;  ; Courges
+2022 ; F3 ; 16 ; 41 ;  ; E.V. (P.V.B)
+2022 ; F3 ; 41 ; 91 ;  ; E.V. (Fév.)
+
+F4 ; 112 ; sud
+2022 ; F4 ; 3 ; 22 ; 20 ; Persil Racine Semence
+2022 ; F4 ; 23 ; 42 ; 20 ; Choux Conserv.
+2022 ; F4 ; 43 ; 48 ; 6 ; Choux Frisé
+2022 ; F4 ; 49 ; 51 ; 3 ; Choux Bruxelles
+2022 ; F4 ; 52 ; 57 ;  ; Choux Fleur Brocoli
+2022 ; F4 ; 58 ; 61 ; 4 ; Choux Plume
+2022 ; F4 ; 62 ; 69 ; 8 ; Choux Fleur
+2022 ; F4 ; 80 ; 89 ;  ; Rutabaga Choux Rave
+2022 ; F4 ; 90 ; 111 ; 23 ; Carottes (Fenouil)
+2022 ; F4 ; 108 ; 112 ; 5 ; E.V. (Fév)
+
+1 ; 12 ; ouest
+2022 ; 1 ; 1 ; 12 ; 12 ; Luzerne ; déclaré par Coco, pas de feuille
+
+2 ; 19 ; ouest
+2022 ; 2 ; 1 ; 19 ; 19 ; Luzerne ; déclaré par Coco, pas de feuille
+
+3 ; 19 ; ouest
+2022 ; 3 ; 1 ; 19 ; 19 ; Luzerne ; déclaré par Coco, pas de feuille
+
+4 ; 19 ; ouest
+2022 ; 4 ; 1 ; 19 ; 19 ; Luzerne ; déclaré par Coco, pas de feuille
+
+5 ; 19 ; ouest
+2022 ; 5 ; 1 ; 19 ; 19 ; Luzerne ; déclaré par Coco, pas de feuille
+
+6 ; 19 ; ouest
+2022 ; 6 ; 1 ; 19 ; 19 ; Luzerne ; déclaré par Coco, pas de feuille
+
+12 ; 5 ; ouest
+2022 ; 12 ; 1 ; 5 ; 5 ; Luzerne ; déclaré par Coco, pas de feuille
+
+13 ; 19 ; ouest
+2022 ; 13 ; 1 ; 19 ; 19 ; Luzerne ; déclaré par Coco, pas de feuille
+
+14 ; 19 ; ouest
+2022 ; 14 ; 1 ; 19 ; 19 ; Luzerne ; déclaré par Coco, pas de feuille
+
+15 ; 19 ; ouest
+2022 ; 15 ; 1 ; 19 ; 19 ; Luzerne ; déclaré par Coco, pas de feuille
+
+16 ; 19 ; ouest
+2022 ; 16 ; 1 ; 19 ; 19 ; Luzerne ; déclaré par Coco, pas de feuille
+
+17 ; 19 ; ouest
+2022 ; 17 ; 1 ; 19 ; 19 ; Luzerne ; déclaré par Coco, pas de feuille
+
+R1 (nord est) ; 111 ; sud
+2022 ; R1 (nord est) ; 1 ; 111 ; 111 ; Luzerne ; déclaré par Coco, pas de feuille
+
+R2 (nord ouest) ; 91 ; sud
+2022 ; R2 (nord ouest) ; 1 ; 91 ; 91 ; Luzerne ; déclaré par Coco, pas de feuille
+
+L.1 nord ; 50 ; ?
+2022 ; L.1 nord ; 1 ; 50 ; 50 ; Luzerne ; déclaré par Coco, pas de feuille
+
+L.1 sud ; 50 ; ?
+2022 ; L.1 sud ; 1 ; 50 ; 50 ; Luzerne ; déclaré par Coco, pas de feuille
+
+L.2 est ; 22 ; ?
+2022 ; L.2 est ; 1 ; 22 ; 22 ; Luzerne ; déclaré par Coco, pas de feuille
+
+L.2 ouest ; 22 ; ?
+2022 ; L.2 ouest ; 1 ; 22 ; 22 ; Luzerne ; déclaré par Coco, pas de feuille
+
+Matt 1 ; 64 ; ?
+2022 ; Matt 1 ; 1 ; 64 ; 64 ; Luzerne ; déclaré par Coco, pas de feuille
+
+Matt 2 ; 38 ; ?
+2022 ; Matt 2 ; 1 ; 38 ; 38 ; Luzerne ; déclaré par Coco, pas de feuille
+
+R3 (sud est) ; 91 ; sud
+2022 ; R3 (sud est) ; 1 ; 91 ; 91 ; Divers légumes ; déclaré par Coco, pas de feuille
+
+R4 (sud ouest) ; 111 ; sud
+2022 ; R4 (sud ouest) ; 1 ; 111 ; 111 ; Divers légumes ; déclaré par Coco, pas de feuille

@@ -1,0 +1,155 @@
+1 ; 12 ; ouest
+2025 ; 1 ; 6 ; 9 ; ; Persil 2024
+2025 ; 1 ; 1 ; 10 ; ; Radis Rose
+
+2 ; 19 ; ouest
+2025 ; 2 ; 1 ; 2 ; 2 ; Choux Rave
+2025 ; 2 ; 3 ; 14 ; 12 ; Choux + Kale
+2025 ; 2 ; 15 ; 19 ; 5 ; Choux de Bruxelles
+
+3 ; 19 ; ouest
+2025 ; 3 ; 1 ; 6 ; ; Fraises
+2025 ; 3 ; 12 ; 19 ; 7 ; Persil 2024
+2025 ; 3 ; 7 ; 19 ; 13 ; Betteraves Rouge
+
+4 ; 19 ; ouest
+2025 ; 4 ; 1 ; 14 ; 14 ; Betterave Rouge
+2025 ; 4 ; 15 ; 18 ; 4 ; Betteraves jaunes
+2025 ; 4 ; 19 ; 19 ; 1 ; Poirée
+
+5 ; 19 ; ouest
+2025 ; 5 ; 1 ; 1 ; 1 ; Choux Rave
+2025 ; 5 ; 2 ; 5 ; 4 ; Rutabaga
+2025 ; 5 ; 6 ; 9 ; 4 ; Choux chinois
+2025 ; 5 ; 10 ; 11 ; 2 ; Radis d'hiver (Daïkon, ?alie Blue
+2025 ; 5 ; 12 ; 19 ; 8 ; Blette
+
+6 ; 19 ; ouest
+2025 ; 6 ; 1 ; 1 ; ; Poirée
+2025 ; 6 ; 2 ; 11 ; ; Betterave
+2025 ; 6 ; 12 ; 14 ; ; Betterave
+2025 ; 6 ; 15 ; 19 ; ; Epinard
+2025 ; 6 ; 3 ; 5 ; 1 / 2 ; Coriandre / Choux rave
+2025 ; 6 ; 6 ; 12 ; 7 ; Salade d'hiver
+2025 ; 6 ; 13 ; 19 ; 5,5 ; Pissenlit
+
+Bruno Ouest 180m ; 29 ; nord
+2025 ; Bruno Ouest 180m ; 1 ; 5 ; 5 ; Radis d'hiver (Daikon)
+2025 ; Bruno Ouest 180m ; 7 ; 15 ; 9 ; Radis d'hiver (Red Meat)
+2025 ; Bruno Ouest 180m ; 19 ; 27 ; 9 ; Carottes
+
+Bruno Ouest 90m ; 32 ; nord
+2025 ; Bruno Ouest 90m ; 31 ; 61 ; 31 ; Betterave Semence Bulls blood
+2025 ; Bruno Ouest 90m ; 30 ; 43 ; 14 ; Carottes
+2025 ; Bruno Ouest 90m ; 47 ; 60 ; 14 ; Patates Douces
+
+Bruno Est 180m ; 61 ; nord
+2025 ; Bruno Est 180m ; 1 ; 16 ; 16 ; Betteraves Rouge
+2025 ; Bruno Est 180m ; 18 ; 39 ; 22 ; Ombell Carottes 25
+2025 ; Bruno Est 180m ; 42 ; 61 ; 20 ; Patate douce
+
+11 ; 65 ; nord
+2025 ; 11 ; 64 ; 65 ; 2 ; Ciboule
+2025 ; 11 ; 59 ; 63 ; 1 / 4 ; Borlotto / Poivrons
+2025 ; 11 ; 43 ; 52 ; 10 ; Choux Fleur d'hiver
+2025 ; 11 ; 35 ; 40 ; 6 ; Choux Milan
+2025 ; 11 ; 13 ; 34 ; 22 ; Choux Rouge
+2025 ; 11 ; 11 ; 12 ; 2 ; Choux Blanc
+2025 ; 11 ; 6 ; 10 ; 5 ; Choux Rouge
+2025 ; 11 ; 1 ; 5 ; 5 ; Choux Blanc
+
+12 ; 5 ; ouest
+2025 ; 12 ; 1 ; 5 ; ; Radis 1
+2025 ; 12 ; 1 ; 5 ; 4,5 ; Brocoli d'hiver
+
+13 ; 19 ; ouest
+2025 ; 13 ; 1 ; 6 ; 6 ; Choux Kale Semences
+2025 ; 13 ; 7 ; 19 ; 13 ; PdT Precoces
+
+14 ; 19 ; ouest
+2025 ; 14 ; 1 ; 4 ; 4 ; PdT Précoces
+2025 ; 14 ; 5 ; 19 ; ; Radis 1
+2025 ; 14 ; 6 ; 19 ; 14 ; Haricot
+
+15 ; 19 ; ouest
+2025 ; 15 ; 9 ; 19 ; 11 ; Haricot
+
+16 ; 19 ; ouest
+2025 ; 16 ; 1 ; 19 ; 19 ; Haricot
+2025 ; 16 ; 1 ; 19 ; ; 
+
+17 ; 19 ; ouest
+2025 ; 17 ; 1 ; 19 ; 19 ; Pois
+2025 ; 17 ; 1 ; 19 ; ; Carottes semence
+
+Etang ; 38 ; ouest
+2025 ; Etang ; 1 ; 15 ; ; Féverole Semences
+2025 ; Etang ; 16 ; 38 ; ; Panais Semences
+2025 ; Etang ; 16 ; 38 ; ; Carottes Semences
+
+F1 ; 111 ; sud
+2025 ; F1 ; 103 ; 111 ; 10 ; PDT
+2025 ; F1 ; 96 ; 102 ; 7 ; Courges Semis 1
+2025 ; F1 ; 60 ; 95 ; 36 ; PDT
+2025 ; F1 ; 42 ; 59 ; 18 ; Courges Semis 1
+2025 ; F1 ; 1 ; 28 ; 27 ; Oignons + ail Printemps
+2025 ; F1 ; 25 ; 40 ; 16 ; Choux Fleur Brocoli Romanesco
+2025 ; F1 ; 1 ; 9 ; 9 ; Salades
+
+F2 ; 91 ; sud
+2025 ; F2 ; 90 ; 91 ; ; Tom
+2025 ; F2 ; 89 ; 89 ; ; ciboulette
+2025 ; F2 ; 36 ; 88 ; 53 ; Poireaux
+2025 ; F2 ; 1 ; 35 ; 35 ; Ombellifère Printemps (Carotte, fenouil, celeri, coriandre, Aneth, Panais)
+
+F3 ; 91 ; sud
+2025 ; F3 ; 80 ; 91 ; 12 ; Céleri
+2025 ; F3 ; 78 ; 79 ; 2 ; Fenouil
+2025 ; F3 ; 71 ; 77 ; 7 ; Persil
+2025 ; F3 ; 68 ; 70 ; 3 ; Fenouil coriandre + Aneth
+2025 ; F3 ; 40 ; 67 ; 28 ; Salades
+2025 ; F3 ; 31 ; 37 ; 7 ; Persil
+2025 ; F3 ; 29 ; 30 ; 2 ; Fenouil Cor. + Aneth
+2025 ; F3 ; 27 ; 28 ; 2 ; Persil
+2025 ; F3 ; 23 ; 26 ; ? ; Fenouil Cor. + Aneth
+2025 ; F3 ; 15 ; 21 ; 7 ; Courges Semis 1
+2025 ; F3 ; 9 ; 14 ; 6 ; Courges Plantation
+2025 ; F3 ; 1 ; 8 ; 8 ; Pastèque
+
+F4 ; 111 ; sud
+2025 ; F4 ; 89 ; 111 ; 23 ; Crucifère Printemps (Navet, Oster)
+2025 ; F4 ; 67 ; 88 ; 22 ; Salade
+2025 ; F4 ; 33 ; 66 ; 35 ; Courgettes + chemins
+2025 ; F4 ; 23 ; 32 ; 10 ; Courges Semis 1
+2025 ; F4 ; 1 ; 22 ; 22 ; Crucifères Printemps (Choux + Choux rave + Pakchoï)
+2025 ; F4 ; 89 ; 111 ; 23 ; Salades
+
+L.1 nord ; 50 ; ?
+2025 ; L.1 nord ; 1 ; 50 ; 50 ; Oignons Sec
+
+L.1 sud ; 50 ; ?
+2025 ; L.1 sud ; 1 ; 50 ; 50 ; Courges Semis 2
+
+L.2 est ; 22 ; ?
+2025 ; L.2 est ; 1 ; 22 ; 21 ; Carottes
+
+L.2 ouest ; 22 ; ?
+2025 ; L.2 ouest ; 1 ; 22 ; 21 ; Carottes
+
+R1 (nord est) ; 111 ; sud
+2025 ; R1 (nord est) ; 1 ; 111 ; 111 ; Luzerne ; déclaré par Coco, pas de feuille
+
+R2 (nord ouest) ; 91 ; sud
+2025 ; R2 (nord ouest) ; 1 ; 91 ; 91 ; Luzerne ; déclaré par Coco, pas de feuille
+
+R3 (sud est) ; 91 ; sud
+2025 ; R3 (sud est) ; 1 ; 91 ; 91 ; Luzerne ; déclaré par Coco, pas de feuille
+
+R4 (sud ouest) ; 111 ; sud
+2025 ; R4 (sud ouest) ; 1 ; 111 ; 111 ; Luzerne ; déclaré par Coco, pas de feuille
+
+Matt 1 ; 64 ; ?
+2025 ; Matt 1 ; 1 ; 64 ; 64 ; Pépinières viticoles ; déclaré par Coco, pas de feuille · échange de parcelle
+
+Matt 2 ; 38 ; ?
+2025 ; Matt 2 ; 1 ; 38 ; 38 ; Pas de culture depuis la moisson ; déclaré par Coco, pas de feuille
