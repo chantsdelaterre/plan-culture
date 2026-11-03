@@ -133,21 +133,16 @@ text{font-family:Barlow,sans-serif;paint-order:stroke;stroke:var(--terre);
 </div>
 </div>
 
+<script src="auth.js"></script>
 <script>
-const URL_SB = 'https://oldkmapumqnibdcniecd.supabase.co';
-const CLE = 'sb_publishable_sMySTPpkgaiUtnban8uCtw_HQFxmsgv';
 
 const $ = s => document.querySelector(s);
+CDT.coinConnexion($('.nav'));
 const ech = s => String(s ?? '').replace(/[&<>"]/g, c =>
   ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-async function pg(chemin) {
-  const r = await fetch(`${URL_SB}/rest/v1/${chemin}`,
-    {headers: {apikey: CLE, Authorization: 'Bearer ' + CLE,
-               'Accept-Profile': 'production'}});
-  if (!r.ok) throw Object.assign(new Error(await r.text()), {code: r.status});
-  return r.json();
-}
+//  Session, acces a la base et coin connexion : voir auth.js.
+const {pg, Session} = CDT;
 
 //  Les niveaux de verite, du plus fin au plus grossier. L'ordre compte : c'est
 //  celui dans lequel on choisit quoi dessiner quand un objet en a plusieurs.

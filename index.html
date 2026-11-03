@@ -78,9 +78,8 @@ h2{font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;
   <div class="carte" id="ou"><h2>Où le poser</h2><div class="vide">Choisis un bloc à gauche.</div></div>
 </div>
 </div>
+<script src="auth.js"></script>
 <script>
-const URL_SB = 'https://oldkmapumqnibdcniecd.supabase.co';
-const CLE = 'sb_publishable_sMySTPpkgaiUtnban8uCtw_HQFxmsgv';
 const TEINTE = {'chénopodiacées':'brique','composée':'teal','convolvulacées':'prune',
   'crucifère':'violet','cucurbitacée':'olive','lilliacée':'bleu','légumineuse':'sauge',
   'ombellifère':'amber','graminée':'paille','rosacée':'rose2','solanacée':'rose',
@@ -89,12 +88,9 @@ const MOIS = ['janv','févr','mars','avr','mai','juin','juil','août','sept','oc
 
 //  PostgREST ne sert que les schemas exposes. Celui-ci s'appelle production,
 //  d'ou l'en-tete Accept-Profile sur chaque appel.
-async function pg(chemin) {
-  const r = await fetch(`${URL_SB}/rest/v1/${chemin}`,
-    {headers: {apikey: CLE, Authorization: 'Bearer ' + CLE, 'Accept-Profile': 'production'}});
-  if (!r.ok) throw Object.assign(new Error(await r.text()), {code: r.status});
-  return r.json();
-}
+//  Session, acces a la base et coin connexion : voir auth.js.
+const {pg, Session} = CDT;
+CDT.coinConnexion(document.querySelector('.nav'));
 
 function jour(d) {
   if (!d) return null;
