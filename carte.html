@@ -1,0 +1,411 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carte du parcellaire</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --papier:#f3f4f1; --surface:#fff; --surface-2:#e8ebe6; --trait:#d3d8d0;
+  --encre:#232a26; --encre-2:#5d6b62; --alerte:#c1502e; --vert:#4a7c52;
+  --pac:#8d9a94; --releve:#3f9a86; --cale:#6e8fc0;
+  --terre:#e3e0d6; --terre-2:#d6d2c4;
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){
+  --papier:#15191a; --surface:#1d2224; --surface-2:#252b2d; --trait:#343c3e;
+  --encre:#e8ece9; --encre-2:#9fada6; --alerte:#e0714a; --vert:#7fb98a;
+  --pac:#8aa2ae; --releve:#58b8a2; --cale:#8fabd8;
+  --terre:#2a3033; --terre-2:#333b3e;
+}}
+*{box-sizing:border-box}
+body{margin:0;padding:24px 16px 60px;background:var(--papier);color:var(--encre);
+  font:400 15px/1.5 Barlow,system-ui,sans-serif}
+.page{max-width:1280px;margin:0 auto}
+h1{font:600 30px/1.1 'Barlow Condensed',sans-serif;margin:0 0 2px}
+.chapo{color:var(--encre-2);margin:0 0 20px;font-size:14px}
+/*  min-width:0 : sans lui un enfant de grille refuse de descendre sous la
+    largeur de son contenu, et c'est la page entiere qui se met a defiler au
+    lieu du seul dessin. */
+.col{display:grid;grid-template-columns:1fr 330px;gap:20px;align-items:start}
+.col>*{min-width:0}
+@media(max-width:980px){.col{grid-template-columns:1fr}}
+.carte{background:var(--surface);border:1px solid var(--trait);border-radius:11px;
+  overflow:hidden}
+h2{font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--encre-2);margin:0;padding:13px 14px;
+  border-bottom:1px solid var(--trait);display:flex;gap:10px;align-items:baseline}
+h2 i{font-style:normal;margin-left:auto;font-family:'IBM Plex Mono',monospace;
+  letter-spacing:0;font-size:11px}
+.ilot{display:flex;gap:10px;align-items:baseline;padding:9px 14px;cursor:pointer;
+  border-bottom:1px solid var(--trait)}
+.ilot:last-child{border-bottom:0}
+.ilot:hover{background:var(--surface-2)}
+.ilot.on{background:var(--surface-2);box-shadow:inset 3px 0 0 var(--releve)}
+.ilot b{flex:1;font-weight:500}
+.ilot .n{font:500 12px 'IBM Plex Mono',monospace;color:var(--encre-2)}
+.jauge{width:46px;height:5px;border-radius:3px;background:var(--trait);
+  overflow:hidden;flex:0 0 46px}
+.jauge i{display:block;height:100%;background:var(--releve)}
+.dessin{padding:14px;display:flex;justify-content:center;background:var(--terre)}
+svg{max-width:100%;height:auto;display:block}
+/*  Sur un ecran etroit, reduire le dessin rendrait les numeros de planche
+    illisibles - or c'est justement au telephone, dans le champ, qu'on a
+    besoin de les lire. On le laisse donc defiler a sa taille. */
+@media(max-width:760px){
+  .dessin{overflow-x:auto;justify-content:flex-start;
+    -webkit-overflow-scrolling:touch}
+  svg{max-width:none;flex:0 0 auto}
+}
+.p-ilot-pac{fill:none;stroke:var(--pac);stroke-width:1.5;stroke-dasharray:7 4}
+.p-ilot{fill:var(--terre-2);stroke:var(--encre-2);stroke-width:1.5}
+.p-parc{fill:var(--releve);fill-opacity:.26;stroke:var(--releve);stroke-width:1.5;
+  cursor:pointer}
+.p-parc:hover{fill-opacity:.46}
+.p-parc.on{fill-opacity:.58;stroke-width:2.5}
+text{font-family:Barlow,sans-serif;paint-order:stroke;stroke:var(--terre);
+  stroke-width:3px;stroke-linejoin:round}
+.t-parc{font-size:13px;font-weight:600;fill:var(--encre);text-anchor:middle}
+.t-ilot{font-size:12px;font-weight:500;fill:var(--encre-2)}
+.t-ech{font-size:11px;font-family:'IBM Plex Mono',monospace;fill:var(--encre-2)}
+.ech{stroke:var(--encre-2);stroke-width:1.5;fill:none}
+.leg{display:flex;gap:16px;flex-wrap:wrap;padding:10px 14px;font-size:12.5px;
+  color:var(--encre-2);border-top:1px solid var(--trait)}
+.leg span{display:flex;gap:6px;align-items:center}
+.leg i{width:15px;height:10px;border-radius:2px;display:inline-block}
+.ligne{display:flex;gap:10px;align-items:baseline;padding:8px 14px;
+  border-bottom:1px solid var(--trait);font-size:14px}
+.ligne:last-child{border-bottom:0}
+.ligne b{flex:1;font-weight:500}
+.ligne .m{font:400 12px 'IBM Plex Mono',monospace;color:var(--encre-2)}
+.ligne.mq b{color:var(--encre-2);font-weight:400}
+.ligne.mq .m{color:var(--alerte)}
+.vide{padding:16px 14px;color:var(--encre-2);font-size:14px}
+.fiche{padding:12px 14px}
+.fiche dt{font:500 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--encre-2);margin:11px 0 3px}
+.fiche dt:first-child{margin-top:0}
+.fiche dd{margin:0;font-size:14.5px}
+.fiche dd.mono{font:400 13px 'IBM Plex Mono',monospace}
+.pst{font:500 11px/1 Barlow,sans-serif;padding:3px 7px;border-radius:20px;
+  color:#fff;white-space:nowrap;display:inline-block}
+.err{background:var(--surface);border:1px solid var(--alerte);border-radius:11px;
+  padding:18px 20px;margin-bottom:20px}
+.err h3{margin:0 0 8px;font:600 17px Barlow,sans-serif;color:var(--alerte)}
+.err code{font:400 13px 'IBM Plex Mono',monospace;background:var(--surface-2);
+  padding:2px 5px;border-radius:4px}
+.nav{display:flex;gap:4px;margin:0 0 18px;flex-wrap:wrap}
+.nav a{font:500 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--encre-2);text-decoration:none;
+  padding:8px 13px;border-radius:7px;border:1px solid transparent}
+.nav a:hover{background:var(--surface-2);color:var(--encre)}
+.nav a[aria-current]{background:var(--surface);border-color:var(--trait);
+  color:var(--encre)}
+</style>
+<div class="page">
+<nav class="nav"><a href="index.html">Blocs d’assolement</a><a href="carte.html" aria-current="page">Carte du parcellaire</a></nav>
+<h1>Carte du parcellaire</h1>
+<p class="chapo" id="chapo">Chargement…</p>
+<div id="erreur"></div>
+<div class="col">
+  <div>
+    <div class="carte">
+      <h2 id="titre">Îlot<i id="sous"></i></h2>
+      <div class="dessin" id="dessin"></div>
+      <div class="leg">
+        <span><i style="background:var(--terre-2);border:1px solid var(--encre-2)"></i>Îlot relevé</span>
+        <span><i style="border:1.5px dashed var(--pac);height:0;border-radius:0"></i>Contour PAC déclaré</span>
+        <span><i style="background:var(--releve);opacity:.5"></i>Parcelle relevée</span>
+      </div>
+    </div>
+    <div class="carte" style="margin-top:20px">
+      <h2>Parcelles de l'îlot<i id="cpt"></i></h2>
+      <div id="liste"></div>
+    </div>
+  </div>
+  <div>
+    <div class="carte">
+      <h2>Les îlots<i id="tot"></i></h2>
+      <div id="ilots"></div>
+    </div>
+    <div class="carte" id="fiche" style="margin-top:20px">
+      <h2>Fiche</h2>
+      <div class="vide">Clique une parcelle sur le dessin.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const URL_SB = 'https://oldkmapumqnibdcniecd.supabase.co';
+const CLE = 'sb_publishable_sMySTPpkgaiUtnban8uCtw_HQFxmsgv';
+
+const $ = s => document.querySelector(s);
+const ech = s => String(s ?? '').replace(/[&<>"]/g, c =>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+async function pg(chemin) {
+  const r = await fetch(`${URL_SB}/rest/v1/${chemin}`,
+    {headers: {apikey: CLE, Authorization: 'Bearer ' + CLE,
+               'Accept-Profile': 'production'}});
+  if (!r.ok) throw Object.assign(new Error(await r.text()), {code: r.status});
+  return r.json();
+}
+
+//  Les niveaux de verite, du plus fin au plus grossier. L'ordre compte : c'est
+//  celui dans lequel on choisit quoi dessiner quand un objet en a plusieurs.
+const NIVEAU = {
+  cale:    {nom: 'calé au RTK',          prec: '± 2 cm'},
+  releve:  {nom: 'relevé sur orthophoto', prec: '± 50 cm'},
+  declare: {nom: 'déclaré au PAC',        prec: '± 2 m'},
+};
+
+//  Projection locale en metres. A l'echelle d'un ilot - quatre cents metres de
+//  cote - une projection plate suffit largement : l'erreur se compte en
+//  centimetres, bien en dessous de la precision du trace lui-meme.
+function projette(contour, ref) {
+  const k = Math.cos(ref.lat * Math.PI / 180) * 111320;
+  return contour.coordinates.map(poly => poly.map(anneau => anneau.map(
+    ([lon, lat]) => [(lon - ref.lon) * k, -(lat - ref.lat) * 110574])));
+}
+
+function cadre(listes) {
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const poly of listes) for (const a of poly) for (const [x, y] of a) {
+    if (x < x0) x0 = x; if (x > x1) x1 = x;
+    if (y < y0) y0 = y; if (y > y1) y1 = y;
+  }
+  return {x0, y0, x1, y1, l: x1 - x0, h: y1 - y0};
+}
+
+function centre(poly) {
+  //  Centre de gravite pondere par l'aire, pour que l'etiquette d'une parcelle
+  //  en deux morceaux tombe dans le gros morceau et pas entre les deux.
+  let sx = 0, sy = 0, sa = 0;
+  for (const anneau of poly) {
+    let a = 0, cx = 0, cy = 0;
+    for (let i = 0; i < anneau.length - 1; i++) {
+      const [x1, y1] = anneau[i], [x2, y2] = anneau[i + 1];
+      const d = x1 * y2 - x2 * y1;
+      a += d; cx += (x1 + x2) * d; cy += (y1 + y2) * d;
+    }
+    if (a === 0) continue;
+    sx += cx / 3; sy += cy / 3; sa += a;
+  }
+  if (sa === 0) return anneauMoyen(poly[0]);
+  return [sx / sa, sy / sa];
+}
+function anneauMoyen(a) {
+  return [a.reduce((s, p) => s + p[0], 0) / a.length,
+          a.reduce((s, p) => s + p[1], 0) / a.length];
+}
+
+let D = null, ilotActif = null, parcActive = null;
+
+// ------------------------------------------------------------------- dessin
+function dessine() {
+  const I = D.ilots.find(i => i.id === ilotActif);
+  const geos = D.geo.filter(g => g.ilot_id === I.id ||
+    D.parcelles.some(p => p.id === g.parcelle_id && p.ilot_id === I.id));
+  if (!geos.length) {
+    $('#dessin').innerHTML = '<p class="vide">Aucun contour pour cet îlot.</p>';
+    return;
+  }
+  //  Reference de projection : le premier point rencontre. Peu importe lequel,
+  //  on ne cherche pas des coordonnees absolues mais une forme.
+  const p0 = geos[0].contour.coordinates[0][0][0];
+  const ref = {lon: p0[0], lat: p0[1]};
+  for (const g of geos) g._m = projette(g.contour, ref);
+
+  const c = cadre(geos.map(g => g._m).flat());
+  const L = 840, marge = 26;
+  const k = Math.min((L - 2 * marge) / c.l, 520 / c.h);
+  const H = c.h * k + 2 * marge;
+  const X = x => marge + (x - c.x0) * k;
+  const Y = y => marge + (y - c.y0) * k;
+  //  Un MultiPolygon donne un seul chemin a plusieurs sous-trajets : chaque
+  //  anneau de chaque morceau. Nos contours n'ont pas de trou, donc aplatir
+  //  les deux niveaux ne risque pas de remplir une enclave par erreur.
+  const chemin = multi => multi.flat().map(anneau =>
+    'M' + anneau.map(([x, y]) => `${X(x).toFixed(1)} ${Y(y).toFixed(1)}`).join('L') + 'Z'
+  ).join('');
+
+  const parcDeIlot = new Map(D.parcelles.filter(p => p.ilot_id === I.id)
+    .map(p => [p.id, p]));
+  const s = [];
+  //  L'ordre de dessin : le PAC derriere, l'ilot releve par-dessus, les
+  //  parcelles au premier plan. Ce qui est le plus precis se voit le mieux.
+  for (const g of geos.filter(g => g.ilot_id && g.niveau === 'declare'))
+    s.push(`<path class="p-ilot-pac" d="${chemin(g._m)}"/>`);
+  for (const g of geos.filter(g => g.ilot_id && g.niveau !== 'declare'))
+    s.push(`<path class="p-ilot" d="${chemin(g._m)}"/>`);
+  for (const g of geos.filter(g => g.parcelle_id)) {
+    const p = parcDeIlot.get(g.parcelle_id);
+    s.push(`<path class="p-parc${g.parcelle_id === parcActive ? ' on' : ''}" `
+      + `d="${chemin(g._m)}" data-p="${g.parcelle_id}">`
+      + `<title>${ech(p.nom)} · ${(g.surface_m2 / 10000).toFixed(2)} ha</title></path>`);
+  }
+  for (const g of geos.filter(g => g.parcelle_id)) {
+    const p = parcDeIlot.get(g.parcelle_id);
+    const [x, y] = centre(g._m.flat());
+    s.push(`<text class="t-parc" x="${X(x).toFixed(1)}" y="${(Y(y) + 4).toFixed(1)}"`
+      + ` style="pointer-events:none">${ech(p.nom)}</text>`);
+  }
+  //  Une echelle, parce qu'un dessin sans echelle ne dit pas si l'on regarde
+  //  une planche ou un ilot. On prend une longueur ronde qui tient en largeur.
+  const cible = c.l / 4;
+  const pas = [10, 20, 25, 50, 100, 200, 250, 500].reduce(
+    (a, b) => Math.abs(b - cible) < Math.abs(a - cible) ? b : a);
+  const xe = marge, ye = H - 11;
+  s.push(`<path class="ech" d="M${xe} ${ye - 4}v4h${(pas * k).toFixed(1)}v-4"/>`);
+  s.push(`<text class="t-ech" x="${xe + 4}" y="${ye - 7}">${pas} m</text>`);
+  //  Le nord. La projection garde le nord en haut, donc une fleche suffit.
+  s.push(`<path class="ech" d="M${L - marge} ${marge + 22}V${marge}l-4 6m4-6l4 6"/>`);
+  s.push(`<text class="t-ech" x="${L - marge - 14}" y="${marge + 30}">N</text>`);
+
+  $('#dessin').innerHTML =
+    `<svg viewBox="0 0 ${L} ${H.toFixed(0)}" width="${L}" role="img"`
+    + ` aria-label="Contours de l'îlot ${ech(I.nom)}">${s.join('')}</svg>`;
+  $('#dessin').querySelectorAll('.p-parc').forEach(e =>
+    e.onclick = () => {parcActive = e.dataset.p; dessine(); fiche(); liste();});
+
+  const niv = [...new Set(geos.map(g => g.niveau))]
+    .sort((a, b) => Object.keys(NIVEAU).indexOf(a) - Object.keys(NIVEAU).indexOf(b));
+  $('#titre').firstChild.textContent = I.nom + ' ';
+  $('#sous').textContent = niv.map(n => NIVEAU[n].nom).join(' + ');
+}
+
+// -------------------------------------------------------------------- listes
+function liste() {
+  const ps = D.parcelles.filter(p => p.ilot_id === ilotActif)
+    .sort((a, b) => a.code.localeCompare(b.code));
+  const g = new Map(D.geo.filter(x => x.parcelle_id)
+    .map(x => [x.parcelle_id, x]));
+  $('#cpt').textContent = `${ps.filter(p => g.has(p.id)).length}/${ps.length} relevées`;
+  $('#liste').innerHTML = ps.length === 0
+    ? '<p class="vide">Aucune parcelle rattachée à cet îlot.</p>'
+    : ps.map(p => {
+        const x = g.get(p.id);
+        return `<div class="ligne${x ? '' : ' mq'}"${x ? ` data-p="${p.id}"`
+          : ''} style="${x ? 'cursor:pointer' : ''}">`
+          + `<b>${ech(p.nom)}</b>`
+          + `<span class="m">${x ? (x.surface_m2 / 10000).toFixed(2) + ' ha'
+                                 : 'à relever'}</span></div>`;
+      }).join('');
+  $('#liste').querySelectorAll('[data-p]').forEach(e =>
+    e.onclick = () => {parcActive = e.dataset.p; dessine(); fiche(); liste();});
+}
+
+function fiche() {
+  const p = D.parcelles.find(x => x.id === parcActive);
+  const g = D.geo.filter(x => x.parcelle_id === parcActive)
+    .sort((a, b) => Object.keys(NIVEAU).indexOf(a.niveau)
+                  - Object.keys(NIVEAU).indexOf(b.niveau));
+  if (!p) return;
+  const x = g[0];
+  const I = D.ilots.find(i => i.id === p.ilot_id);
+  const m = D.metrique.get(p.id);
+  const nb = m && m.nb_planches;
+  const l = [];
+  l.push(`<dt>Parcelle</dt><dd>${ech(p.nom)} <span class="m">${ech(p.code)}</span></dd>`);
+  l.push(`<dt>Îlot</dt><dd>${ech(I ? I.nom : '—')}`
+    + (I && I.ilot_pac ? ` <span class="m">PAC ${ech(I.ilot_pac)}</span>` : '') + '</dd>');
+  if (nb) {
+    //  L'emprise se deduit du nombre de planches, pas l'inverse : c'est le
+    //  nombre ecrit sur la feuille qui fait foi, la largeur n'est qu'un calcul.
+    l.push(`<dt>Planches</dt><dd class="mono">${nb} planches `
+      + `· emprise ${(nb * 1.70 + 0.30).toFixed(2)} m</dd>`);
+    //  Le metre lineaire de planche, et non la planche : elles vont de 90 a
+    //  265 m, un decompte en planches ne dit donc rien du besoin en plants.
+    l.push(`<dt>Longueur de planche</dt><dd class="mono">`
+      + `${Math.round(m.longueur_totale_m).toLocaleString('fr-FR')} m linéaires`
+      + ` · ${Math.round(m.longueur_totale_m / nb)} m par planche</dd>`);
+  }
+  if (p.planche_1_au)
+    l.push(`<dt>Planche 1</dt><dd>au ${ech(p.planche_1_au)}</dd>`);
+  if (x) {
+    l.push(`<dt>Surface relevée</dt><dd class="mono">`
+      + `${(x.surface_m2 / 10000).toFixed(2)} ha · ${Math.round(x.surface_m2)} m²`
+      + `<br>périmètre ${Math.round(x.perimetre_m)} m</dd>`);
+    //  Le recoupement qui vaut la peine : l'emprise theorique deduite des
+    //  planches contre la surface du trace. Les deux viennent de sources
+    //  independantes - une feuille manuscrite et un coup de souris sur
+    //  orthophoto - donc un ecart large accuse l'une des deux.
+    if (m && m.surface_occupee_m2) {
+      const e = 100 * (x.surface_m2 - m.surface_occupee_m2) / m.surface_occupee_m2;
+      const gros = Math.abs(e) > 15;
+      l.push(`<dt>Recoupement</dt><dd class="mono">`
+        + `théorique ${Math.round(m.surface_occupee_m2).toLocaleString('fr-FR')} m²`
+        + ` <span style="color:var(--${gros ? 'alerte' : 'vert'})">`
+        + `${e > 0 ? '+' : ''}${e.toFixed(0)} %</span>`
+        + (gros ? '<br><span style="color:var(--alerte);font-family:Barlow">'
+            + 'Écart large : le tracé ou le nombre de planches est à revoir.</span>'
+            : '') + '</dd>');
+    }
+    l.push('<dt>Niveau de vérité</dt><dd>' + g.map(y =>
+      `<span class="pst" style="background:var(--${y.niveau === 'declare' ? 'pac'
+        : y.niveau})">${NIVEAU[y.niveau].nom} ${NIVEAU[y.niveau].prec}</span>`
+      ).join(' ') + '</dd>');
+    l.push(`<dt>Source</dt><dd style="font-size:13.5px">${ech(x.source)}`
+      + (x.releve_le ? ` · ${ech(x.releve_le)}` : '') + '</dd>');
+    if (x.note) l.push(`<dt>Note</dt><dd style="font-size:13.5px">${ech(x.note)}</dd>`);
+  } else {
+    l.push('<dt>Contour</dt><dd style="color:var(--alerte)">Pas encore relevée</dd>');
+  }
+  $('#fiche').innerHTML = '<h2>Fiche</h2><dl class="fiche">' + l.join('') + '</dl>';
+}
+
+function ilots() {
+  const g = new Map(D.geo.filter(x => x.parcelle_id).map(x => [x.parcelle_id, 1]));
+  const rangs = D.ilots.map(i => {
+    const ps = D.parcelles.filter(p => p.ilot_id === i.id);
+    return {i, n: ps.length, ok: ps.filter(p => g.has(p.id)).length};
+  }).filter(r => r.n > 0 || D.geo.some(x => x.ilot_id === r.i.id));
+  $('#tot').textContent = rangs.reduce((s, r) => s + r.ok, 0) + '/'
+    + rangs.reduce((s, r) => s + r.n, 0) + ' parcelles';
+  $('#ilots').innerHTML = rangs.map(r =>
+    `<div class="ilot${r.i.id === ilotActif ? ' on' : ''}" data-i="${r.i.id}">`
+    + `<b>${ech(r.i.nom)}</b>`
+    + `<span class="jauge"><i style="width:${r.n ? 100 * r.ok / r.n : 0}%"></i></span>`
+    + `<span class="n">${r.ok}/${r.n}</span></div>`).join('');
+  $('#ilots').querySelectorAll('[data-i]').forEach(e =>
+    e.onclick = () => {ilotActif = e.dataset.i; parcActive = null;
+                       ilots(); dessine(); liste();
+                       $('#fiche').innerHTML = '<h2>Fiche</h2>'
+                         + '<div class="vide">Clique une parcelle sur le dessin.</div>';});
+}
+
+// --------------------------------------------------------------------- bord
+(async () => {
+  try {
+    const [geo, il, pa, rg] = await Promise.all([
+      pg('geometrie?select=niveau,contour,surface_m2,perimetre_m,source,'
+         + 'precision_m,releve_le,note,ilot_id,parcelle_id'),
+      pg('ilot?select=id,code,nom,ilot_pac&order=nom'),
+      pg('parcelle?select=id,code,nom,ilot_id,planche_1_au&actif=is.true&order=code'),
+      pg('v_parcelle_metrique?select=parcelle_id,nb_planches,longueur_totale_m,'
+         + 'surface_occupee_m2'),
+    ]);
+    D = {geo, ilots: il, parcelles: pa,
+         metrique: new Map(rg.map(r => [r.parcelle_id, r]))};
+
+    const nParc = geo.filter(g => g.parcelle_id).length;
+    const ha = geo.filter(g => g.niveau !== 'declare')
+      .reduce((s, g) => s + Number(g.surface_m2), 0) / 10000;
+    $('#chapo').textContent =
+      `${geo.length} contours en base · ${nParc} parcelles sur ${pa.length} relevées `
+      + `· ${ha.toFixed(2)} ha de tracé. Trois niveaux de vérité superposés, `
+      + `jamais écrasés : le PAC, le relevé sur orthophoto, le RTK à venir.`;
+
+    //  On ouvre sur l'ilot le mieux releve : c'est celui ou la page montre le
+    //  plus de choses, donc celui qui explique le mieux ce qu'elle fait.
+    const score = i => D.geo.filter(g => g.ilot_id === i.id
+      || pa.some(p => p.id === g.parcelle_id && p.ilot_id === i.id)).length;
+    ilotActif = il.slice().sort((a, b) => score(b) - score(a))[0].id;
+    ilots(); dessine(); liste();
+  } catch (e) {
+    $('#chapo').textContent = '';
+    $('#erreur').innerHTML = '<div class="err"><h3>La carte n\'a pas pu lire la base</h3>'
+      + `<p>${e.code ? 'Code ' + e.code + '. ' : ''}${ech(e.message).slice(0, 400)}</p>`
+      + '<p>Si c\'est un <code>404</code>, une migration manque. Si c\'est un '
+      + '<code>401</code>, la clé publique a changé dans Supabase.</p></div>';
+  }
+})();
+</script>

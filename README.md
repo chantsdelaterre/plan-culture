@@ -7,10 +7,14 @@ Remplace le fichier FileMaker. Base de données **Supabase** (projet
 
 | Dossier | Contenu |
 |---|---|
-| `index.html` | L'écran des blocs d'assolement, publié sur GitHub Pages |
+| `index.html` | Les blocs d'assolement — ce qu'on veut planter, et combien |
+| `carte.html` | La carte du parcellaire — les contours, et ce qui reste à relever |
 | `migrations/` | Toutes les migrations SQL, dans l'ordre de leur nom (horodaté) |
 | `asso/` | Les relevés d'assolement manuscrits, transcrits, une année par fichier |
 | `geo/` | Les contours relevés au GPS et les scripts qui les traitent |
+
+Les deux pages sont servies par GitHub Pages et lisent Supabase en direct :
+rien n'est figé dans le code, donc une page ne peut pas être périmée.
 
 ## Les migrations
 

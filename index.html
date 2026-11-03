@@ -60,8 +60,16 @@ h2{font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;
 .err code{font:400 13px 'IBM Plex Mono',monospace;background:var(--surface-2);
   padding:2px 5px;border-radius:4px}
 .err ol{margin:10px 0 0;padding-left:20px;line-height:1.7}
+.nav{display:flex;gap:4px;margin:0 0 18px;flex-wrap:wrap}
+.nav a{font:500 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--encre-2);text-decoration:none;
+  padding:8px 13px;border-radius:7px;border:1px solid transparent}
+.nav a:hover{background:var(--surface-2);color:var(--encre)}
+.nav a[aria-current]{background:var(--surface);border-color:var(--trait);
+  color:var(--encre)}
 </style>
 <div class="page">
+<nav class="nav"><a href="index.html" aria-current="page">Blocs d’assolement</a><a href="carte.html">Carte du parcellaire</a></nav>
 <h1>Blocs d'assolement</h1>
 <p class="chapo" id="chapo">Chargement…</p>
 <div id="erreur"></div>
