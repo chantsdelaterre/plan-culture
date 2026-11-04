@@ -1,0 +1,66 @@
+name: Migrations
+
+# Envoi sur main : applique les migrations nouvelles de migrations/.
+#
+# « production » : automatique, sous le role production_proprietaire, qui ne
+#   possede que le schema production. Une erreur ne peut atteindre ni le Suivi
+#   des temps, ni la cantine, ni les comptes.
+# « validation » : attend l'approbation de Coco (environnement validation-coco).
+#
+# Depot PUBLIC : les journaux de GitHub Actions sont lisibles par tout le
+# monde. Aucune donnee de la base ne doit y apparaitre — ni un nom de culture,
+# ni une parcelle, ni une date. Le script n'affiche que des noms de fichiers,
+# des compteurs et des messages d'erreur expurges.
+#
+# Les pages (index.html, carte.html) sont servies par GitHub Pages, qui a son
+# propre reglage : ce flux ne les touche pas.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "migrations/**"
+      - "outils/appliquer.sh"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: migrations-plan-culture
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  analyser:
+    runs-on: ubuntu-24.04
+    outputs:
+      a_appliquer: ${{ steps.analyse.outputs.a_appliquer }}
+      besoin_validation: ${{ steps.analyse.outputs.besoin_validation }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: analyse
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: outils/appliquer.sh analyser "$SUPABASE_DB_URL"
+
+  migrations:
+    needs: analyser
+    if: needs.analyser.outputs.a_appliquer == 'true' && needs.analyser.outputs.besoin_validation != 'true'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: outils/appliquer.sh appliquer "$SUPABASE_DB_URL"
+
+  migrations-validees:
+    needs: analyser
+    if: needs.analyser.outputs.besoin_validation == 'true'
+    runs-on: ubuntu-24.04
+    environment: validation-coco
+    steps:
+      - uses: actions/checkout@v4
+      - env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: outils/appliquer.sh appliquer "$SUPABASE_DB_URL" --avec-validation

@@ -19,7 +19,9 @@ rien n'est figé dans le code, donc une page ne peut pas être périmée.
 ## Les migrations
 
 Elles s'appliquent dans l'ordre alphabétique de leur nom, qui est leur
-horodatage. On les colle dans l'éditeur SQL de Supabase.
+horodatage. **Un envoi sur `main` les applique tout seul** — voir `CLAUDE.md`
+pour l'en-tête `-- portee:` et les règles. Ce qui est destructif attend une
+approbation.
 
 **Ce dossier est la seule source.** Les quinze premières sont nées dans le
 dépôt `suivi-temps` (`supabase/migrations/`), parce que le plan de culture a
