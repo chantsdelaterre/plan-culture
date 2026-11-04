@@ -21,6 +21,17 @@ rien n'est figé dans le code, donc une page ne peut pas être périmée.
 Elles s'appliquent dans l'ordre alphabétique de leur nom, qui est leur
 horodatage. On les colle dans l'éditeur SQL de Supabase.
 
+**Ce dossier est la seule source.** Les quinze premières sont nées dans le
+dépôt `suivi-temps` (`supabase/migrations/`), parce que le plan de culture a
+démarré là-bas avant d'avoir son propre dépôt. Elles y restent pour l'histoire,
+mais c'est ici qu'elles vivent désormais : une migration ajoutée là-bas serait
+invisible ici, et l'inverse aussi. On l'a appris en découvrant qu'il manquait
+cinq migrations de ce côté, dont tout un module de stock.
+
+L'ensemble se rejoue depuis une base vide : vingt-trois migrations, dans
+l'ordre, sans échec. C'est ce qui garantit que le dépôt peut reconstruire la
+base, et non seulement la décrire.
+
 Deux règles, apprises à nos dépens :
 
 1. **L'éditeur SQL de Supabase valide instruction par instruction.** Un script

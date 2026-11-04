@@ -138,6 +138,12 @@ join production.parcelle p on p.id = a.parcelle_id
 left join production.itineraire i on i.id = c.itineraire_id
 left join production.configuration_rangs cr on cr.id = i.configuration_rangs_id;
 
+-- Reposé explicitement : create or replace view sans clause WITH réinitialise
+-- les options de la vue, donc security_invoker serait perdu. v_affectation est
+-- accordée à anon : sans cette option elle s'exécuterait avec les droits de son
+-- propriétaire et contournerait le RLS de l'appelant.
+alter view production.v_affectation set (security_invoker = true);
+
 
 -- ============================================================================
 -- Retrait des colonnes remplacées

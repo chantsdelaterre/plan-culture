@@ -138,10 +138,10 @@ select
       ), 0)                              as quantite,
   coalesce(di.unite, v.unite_vente)      as unite,
   t.prix_achat,
-  coalesce(di.quantite, 0)
+  (coalesce(di.quantite, 0)
     + coalesce(sum(m.quantite) filter (
         where di.date is null or m.date > di.date
-      ), 0)
+      ), 0))
     * coalesce(t.prix_achat, 0)          as valeur_estimee
 from production.variete v
 left join dernier_inventaire di on di.variete_id = v.id

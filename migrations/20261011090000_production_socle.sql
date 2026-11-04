@@ -8,7 +8,7 @@ create schema if not exists production;
 
 -- btree_gist est nécessaire plus tard pour les contraintes d'exclusion
 -- sur les périodes d'occupation (une planche, deux cultures qui se chevauchent).
-create extension if not exists btree_gist;
+create extension if not exists btree_gist with schema extensions;
 
 
 -- ============================================================================
