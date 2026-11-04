@@ -1,3 +1,4 @@
+-- portee: validation
 -- ============================================================================
 -- Plan de culture maraichere · Ouvrir la campagne 2027
 --
