@@ -30,6 +30,10 @@ body{margin:0;padding:24px 16px 72px;background:var(--papier);color:var(--encre)
 h1{font:600 30px/1.1 'Barlow Condensed',sans-serif;margin:0 0 2px}
 .chapo{color:var(--encre-2);margin:0 0 18px;font-size:14px}
 .carte{background:var(--surface);border:1px solid var(--trait);border-radius:11px;overflow:hidden}
+.carte.fige{overflow:visible}
+.carte.fige>h2{position:sticky;top:0;z-index:3;background:var(--surface);
+  border-radius:11px 11px 0 0}
+.carte.fige>.cols{position:sticky;z-index:2}
 h2{font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;
   text-transform:uppercase;color:var(--encre-2);margin:0;padding:11px 18px;
   border-bottom:1px solid var(--trait);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
@@ -71,9 +75,31 @@ button{font:inherit}
 .seg button[aria-pressed=true]{background:var(--encre);color:var(--papier)}
 /* tableau */
 .cols,.lb,.lc,.lv{display:flex;gap:10px;align-items:center}
-.cols{padding:7px 18px;background:var(--surface-2);border-bottom:1px solid var(--trait);
+.cols{padding:0 18px;background:var(--surface-2);border-bottom:1px solid var(--trait);
   font:500 10.5px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;
   text-transform:uppercase;color:var(--encre-2)}
+.cols span{align-self:center;padding:8px 0}
+.cols button{display:flex;align-items:center;gap:3px;background:transparent;border:0;
+  cursor:pointer;padding:9px 0;min-height:38px;font:inherit;color:var(--encre-2)}
+.cols button:hover{color:var(--encre)}
+.cols button[aria-sort]{color:var(--encre)}
+/* la semaine quitte sa colonne : collée au nom, elle se lit d'un coup */
+.sem{flex:0 0 auto;font:500 11.5px/1 'IBM Plex Mono',monospace;color:var(--encre-2);
+  background:var(--surface-2);border-radius:5px;padding:4px 7px;white-space:nowrap}
+.lb[aria-expanded=true] .sem{background:var(--surface)}
+/* sélection d'une culture pour la sortir du bloc */
+.coche{flex:0 0 auto;display:flex;align-items:center;cursor:pointer;padding:0 2px 0 0}
+.coche input{width:16px;height:16px;accent-color:var(--vert);cursor:pointer}
+.lc.prise{background:var(--vert-fond);box-shadow:inset 3px 0 0 var(--vert)}
+.ouvrir{flex:1 1 auto;min-width:0;display:flex;gap:8px;align-items:center;
+  background:transparent;border:0;padding:0;cursor:pointer;text-align:left;
+  min-height:44px;font:inherit;color:var(--encre)}
+.ouvrir:hover .cnom{text-decoration:underline;text-underline-offset:3px}
+.bsel{display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+  padding:9px 18px 9px 24px;border-top:1px solid var(--vert-trait);
+  background:var(--vert-fond);font-size:13.5px}
+.lb.creux{opacity:.62}
+.lb.creux .nom{font-weight:400}
 .lb{width:100%;padding:8px 18px;min-height:44px;text-align:left;cursor:pointer;
   border:0;border-bottom:1px solid var(--trait-2);background:transparent;color:var(--encre)}
 .lb:hover{background:var(--surface-3)}
@@ -182,7 +208,7 @@ summary{padding:11px 18px;cursor:pointer;font:500 14px/1 Barlow,sans-serif;color
 <div id="erreur"></div>
 <div class="carte tot" id="totaux"></div>
 <div class="carte" id="ajuster" style="margin-bottom:16px"></div>
-<div class="carte" id="liste"></div>
+<div class="carte fige" id="liste"></div>
 </div>
 
 <div class="etat" id="etat" role="status" aria-live="polite"></div>
@@ -244,6 +270,12 @@ const litType = note => {
 const ecritType = t => t.trim() ? 'type : ' + t.trim() : null;
 
 let D = null, vue = 'surface', ouvertB = null, ouvertC = null;
+//  Le tri vaut pour les deux niveaux à la fois : les blocs entre eux et les
+//  cultures dans chaque bloc. Un seul réglage, cohérent partout.
+let tri = 'metres', ordre = -1;  // -1 : décroissant
+//  Scinder et fusionner ne sont pas deux fonctions : ce sont deux usages d'un
+//  seul geste, sortir des cultures d'un bloc vers un autre.
+let choisies = new Set();
 let enAttente = null;   // { affId, cultureId, metres } : variété retirée, mètres sans destination
 
 // ─────────────────────────────────────────────────────────── état d'écriture
@@ -297,6 +329,8 @@ async function charger() {
     c.parCaisse = (it.materiel || {}).nb_par_caisse || null;
     c.format = it.nom ? it.nom.replace(/^.*?—\s*/, '') : '';
     c.m = c.affectation.reduce((s, a) => s + Number(a.longueur_m || 0), 0);
+    c.nom = (c.legume || {}).nom || '?';
+    c.semNum = c.sem || 0;
   }
   D = {blocs, cultures, campagnes, legumes,
        parBloc: new Map(blocs.map(b => [b.id, b]))};
@@ -360,12 +394,51 @@ function arbre() {
         if (c.parCaisse) caisses += q / c.parCaisse;
       }
     }
-    lignes.push({bloc: b, cles: k, cultures: cs.sort((a, b2) => b2.m - a.m),
+    const dep = sems.filter(Boolean).sort((x, y) => x - y)[0] || 0;
+    lignes.push({bloc: b, cles: k, cultures: classer(cs, c => c.m),
       nom: b ? b.nom_court : '— sans bloc —', m, plants, caisses, graines, grammes,
-      convertible, familles: [...fam.keys()], mats: [...mats], sem: plage(sems)});
+      convertible, familles: [...fam.keys()], mats: [...mats], sem: plage(sems),
+      semNum: dep});
   }
-  lignes.sort((a, b) => b.m - a.m);
-  return lignes;
+  for (const b of D.blocs) {
+    if (parBloc.has(b.id)) continue;
+    lignes.push({bloc: b, cles: b.id, cultures: [], nom: b.nom_court, m: 0,
+      plants: 0, caisses: 0, graines: 0, grammes: 0, convertible: true,
+      familles: [], mats: [], sem: '—', creux: true});
+  }
+  return classer(lignes, l => l.m);
+}
+
+//  Un clic classe, un second renverse. Les blocs vides restent au bout : ils
+//  n'ont ni mètres ni semaine à comparer.
+function classer(liste, valeur) {
+  return liste.slice().sort((a, b) => {
+    //  Les blocs vides au bout : ils n'ont ni mètres ni semaine à comparer.
+    if (a.creux !== b.creux) return a.creux ? 1 : -1;
+    if (tri === 'nom') return ordre * String(a.nom).localeCompare(String(b.nom), 'fr');
+    if (tri === 'semaine') {
+      //  Une culture sans date reste en queue, quel que soit le sens : on ne
+      //  sait pas quand elle entre au champ, elle n'a pas à ouvrir la liste.
+      const x = a.semNum || 0, y = b.semNum || 0;
+      if (!x !== !y) return x ? -1 : 1;
+      return ordre * (x - y);
+    }
+    return ordre * (valeur(a) - valeur(b));
+  });
+}
+//  Un clic classe, un second renverse. Le sens de départ suit ce qu'on attend :
+//  les plus grandes surfaces d'abord, mais l'année dans l'ordre du calendrier
+//  et les noms dans celui de l'alphabet.
+function bascule(quoi) {
+  if (tri === quoi) ordre = -ordre;
+  else { tri = quoi; ordre = quoi === 'metres' ? -1 : 1; }
+  peindre();
+}
+function enTete(quoi, libelle, flex) {
+  const actif = tri === quoi;
+  return `<button type="button" data-tri="${quoi}" style="flex:${flex}"`
+    + (actif ? ` aria-sort="${ordre < 0 ? 'descending' : 'ascending'}"` : '')
+    + `>${libelle}<span aria-hidden="true">${actif ? (ordre < 0 ? ' ▾' : ' ▴') : ''}</span></button>`;
 }
 
 // ────────────────────────────────────────────────────────────────── signaux
@@ -440,12 +513,13 @@ function peindre() {
         + '</div></div>').join('') + '</div>';
 
   const surf = vue === 'surface';
+  const droite = q => 'flex:0 0 ' + q + 'px;justify-content:flex-end;text-align:right';
   const col = surf
-    ? '<span class="opt" style="flex:0 0 72px;text-align:right">Ares</span>'
+    ? enTete('metres', 'Ares', droite(72)).replace('<button', '<button class="opt"')
       + '<span class="opt" style="flex:0 0 62px;text-align:right">pl120</span>'
       + '<span class="opt" style="flex:0 0 62px;text-align:right">pl180</span>'
       + '<span style="flex:0 0 76px;text-align:right">Mètres</span>'
-    : '<span class="opt" style="flex:0 0 72px;text-align:right">Ares</span>'
+    : enTete('metres', 'Ares', droite(72)).replace('<button', '<button class="opt"')
       + '<span class="opt" style="flex:0 0 96px;text-align:right">Matériel</span>'
       + '<span style="flex:0 0 86px;text-align:right">Quantité</span>'
       + '<span class="opt" style="flex:0 0 104px;text-align:right">À commander</span>';
@@ -456,13 +530,20 @@ function peindre() {
     + `<button type="button" data-vue="surface" aria-pressed="${surf}">Surface</button>`
     + `<button type="button" data-vue="materiel" aria-pressed="${!surf}">Matériel végétal</button>`
     + '</span></h2>'
-    + `<div class="cols"><span style="flex:1 1 auto">Bloc · culture · variété</span>`
-    + '<span class="opt" style="flex:0 0 52px;text-align:right">Sem.</span>' + col + '</div>'
+    + '<div class="cols">' + enTete('nom', 'Bloc · culture · variété', '1 1 auto')
+    + enTete('semaine', 'Semaine', droite(72)).replace('<button', '<button class="opt"')
+    + col + '</div>'
     + (lignes.length ? lignes.map(ligneBloc).join('')
        : '<p class="vide">Aucune culture dans cet horizon.</p>');
 
   $('#liste').querySelectorAll('[data-vue]').forEach(b =>
     b.onclick = () => { vue = b.dataset.vue; peindre(); });
+  $('#liste').querySelectorAll('[data-tri]').forEach(b =>
+    b.onclick = () => bascule(b.dataset.tri));
+  //  Les en-têtes se collent SOUS le bandeau, dont la hauteur change quand il
+  //  passe sur deux lignes. On la mesure plutôt que de la supposer.
+  const bandeau = $('#liste h2'), entetes = $('#liste .cols');
+  if (bandeau && entetes) entetes.style.top = bandeau.offsetHeight + 'px';
   brancher();
 }
 
@@ -479,7 +560,7 @@ function chiffres(m, c) {
 function ligneBloc(l) {
   const ouvert = ouvertB === l.cles;
   const surf = vue === 'surface';
-  const teinte = TEINTE[l.familles[0]] || 'var(--encre-3)';
+  const teinte = l.creux ? 'var(--trait)' : (TEINTE[l.familles[0]] || 'var(--encre-3)');
   const cm = chiffres(l.m, null);
   const col = surf
     ? `<span class="opt mono" style="flex:0 0 72px">${cm.ares}</span>`
@@ -494,20 +575,39 @@ function ligneBloc(l) {
               : '<span style="color:var(--alerte)">à convertir</span>')
             : (l.caisses ? fr(l.caisses) + ' caisses' : '—'))}</span>`;
 
-  return `<div><button type="button" class="lb" data-bloc="${ech(l.cles)}" aria-expanded="${ouvert}">`
+  return `<div><button type="button" class="lb${l.creux ? ' creux' : ''}" data-bloc="${ech(l.cles)}" aria-expanded="${ouvert}">`
     + `<span style="flex:1 1 auto;min-width:0;display:flex;gap:9px;align-items:center">`
     + `<span class="chev" aria-hidden="true" style="${ouvert ? 'transform:rotate(90deg)' : ''}">▸</span>`
     + `<span class="puce" style="background:${teinte}"></span>`
     + `<span class="nom">${ech(l.nom)}</span>`
     + `<span class="mono" style="color:var(--encre-3);font-size:12px">${l.cultures.length} cult.</span>`
+    + (l.sem !== '—' ? `<span class="sem opt">${l.sem}</span>` : '')
     + (l.familles.length > 1 ? `<span class="pil ko">${l.familles.length} familles</span>` : '')
+    + (l.creux ? '<span class="mono" style="color:var(--encre-3);font-size:12px">vide</span>' : '')
     + '</span>'
-    + `<span class="opt mono" style="flex:0 0 52px;font-size:12px;color:var(--encre-3)">${l.sem}</span>`
+    + '<span class="opt" style="flex:0 0 72px"></span>'
     + col + '</button>'
-    + (ouvert ? `<div class="corps">${l.cultures.map(c => ligneCulture(c, l)).join('')}`
-        + `<div style="padding:8px 18px 11px 34px;border-top:1px solid var(--trait-2);display:flex;gap:9px;flex-wrap:wrap">`
+    + (ouvert ? `<div class="corps">`
+        + (l.cultures.length ? l.cultures.map(c => ligneCulture(c, l)).join('')
+           : '<p class="vide">Ce bloc est vide. Coche des cultures ailleurs et envoie-les ici.</p>')
+        + barreSelection(l)
+        + `<div style="padding:8px 18px 11px 24px;border-top:1px solid var(--trait-2);display:flex;gap:9px;flex-wrap:wrap;align-items:center">`
         + `<button type="button" class="btn tiret" data-ajout-culture="${ech(l.cles)}">+ Ajouter une culture</button>`
+        + (l.cultures.length > 1 ? '<span style="font:400 12.5px Barlow,sans-serif;color:var(--encre-3)">Coche des cultures pour les sortir du bloc.</span>' : '')
         + '</div></div>' : '') + '</div>';
+}
+
+//  La barre n'apparaît que si des cultures de CE bloc sont cochées : on ne
+//  déplace pas des cultures venues de deux blocs à la fois.
+function barreSelection(l) {
+  const prises = l.cultures.filter(c => choisies.has(c.id));
+  if (!prises.length) return '';
+  const m = prises.reduce((t, c) => t + c.m, 0);
+  return '<div class="bsel">'
+    + `<span style="flex:1 1 200px"><b>${prises.length} culture${prises.length > 1 ? 's' : ''}</b>`
+    + ` sélectionnée${prises.length > 1 ? 's' : ''} · ${fr(m)} m · ${fr(m * EMPRISE / 100, 1)} ares</span>`
+    + `<button type="button" class="btn vif" data-deplacer="${ech(l.cles)}">Déplacer vers…</button>`
+    + '<button type="button" class="btn fant" data-decocher="1">Tout décocher</button></div>';
 }
 
 function ligneCulture(c, l) {
@@ -533,15 +633,19 @@ function ligneCulture(c, l) {
       + `<span class="opt somme" style="flex:0 0 104px">${n.commande}</span>`;
 
   const att = enAttente && enAttente.cultureId === c.id;
-  return `<div><div class="lc">`
-    + `<span style="flex:1 1 auto;min-width:0;display:flex;gap:8px;align-items:baseline">`
-    + `<button type="button" class="chev" data-cult="${c.id}" aria-label="Voir les variétés" `
-    + `style="${ouvert ? 'transform:rotate(90deg)' : ''}">▸</button>`
+  const prise = choisies.has(c.id);
+  return `<div><div class="lc${prise ? ' prise' : ''}">`
+    + `<label class="coche"><span class="sr">Sortir ${ech(c.nom)} du bloc</span>`
+    + `<input type="checkbox" data-coche="${c.id}"${prise ? ' checked' : ''}></label>`
+    + `<button type="button" class="ouvrir" data-cult="${c.id}" aria-expanded="${ouvert}">`
+    + `<span class="chev" aria-hidden="true" style="${ouvert ? 'transform:rotate(90deg)' : ''}">▸</span>`
     + `<span style="display:flex;flex-direction:column;gap:1px;min-width:0">`
-    + `<span class="cnom">${ech((c.legume || {}).nom || '?')}</span>`
+    + `<span class="cnom">${ech(c.nom)}</span>`
     + `<span class="fmt">${ech([c.format, (c.fournisseur || {}).nom].filter(Boolean).join(' · '))}</span>`
-    + '</span></span>'
-    + `<span class="opt mono" style="flex:0 0 52px;font-weight:500;font-size:12px">${c.sem ? 'S' + String(c.sem).padStart(2, '0') : '—'}</span>`
+    + '</span>'
+    + `<span class="sem">${c.sem ? 'S' + String(c.sem).padStart(2, '0') : '—'}</span>`
+    + '</button>'
+    + '<span class="opt" style="flex:0 0 72px"></span>'
     + col + '</div>'
     + (ouvert ? `<div class="vcorps">${c.affectation.map(a => ligneVariete(a, c)).join('')}`
         + (att ? barreAttente(c) : '')
@@ -575,7 +679,7 @@ function ligneVariete(a, c) {
     + (v.id ? `<label><span class="sr">Type de ${ech(v.nom)}</span>`
         + `<input class="txt" value="${ech(litType(v.note))}" placeholder="type" data-type="${v.id}"></label>` : '')
     + '</span>'
-    + '<span class="opt" style="flex:0 0 52px"></span>' + col
+    + '<span class="opt" style="flex:0 0 72px"></span>' + col
     + `<button type="button" class="sup" data-retirer="${a.id}" `
     + `aria-label="${retiree ? 'Remettre' : 'Retirer'} ${ech(v.nom)}">${retiree ? '↺' : '×'}</button>`
     + '</div>';
@@ -595,11 +699,11 @@ function barreAttente(c) {
 function brancher() {
   const q = s => $('#liste').querySelectorAll(s);
   q('[data-bloc]').forEach(b => b.onclick = e => {
-    if (e.target.closest('input,select,.chev,[data-edit]')) return;
+    if (e.target.closest('input,select,[data-edit]')) return;
     ouvertB = ouvertB === b.dataset.bloc ? null : b.dataset.bloc; ouvertC = null; peindre();
   });
   q('[data-cult]').forEach(b => b.onclick = e => {
-    e.stopPropagation();
+    e.stopPropagation(); e.preventDefault();
     ouvertC = ouvertC === b.dataset.cult ? null : b.dataset.cult; peindre();
   });
   q('[data-edit]').forEach(i => {
@@ -622,6 +726,13 @@ function brancher() {
     e.stopPropagation();
     etat('Ajouter une culture : écran à venir', true);
   });
+  q('[data-coche]').forEach(i => i.onchange = e => {
+    e.stopPropagation();
+    if (i.checked) choisies.add(i.dataset.coche); else choisies.delete(i.dataset.coche);
+    peindre();
+  });
+  q('[data-deplacer]').forEach(b => b.onclick = e => { e.stopPropagation(); modaleDeplacer(b.dataset.deplacer); });
+  q('[data-decocher]').forEach(b => b.onclick = e => { e.stopPropagation(); choisies.clear(); peindre(); });
 }
 
 function trouverAff(id) {
@@ -688,6 +799,73 @@ async function resoudre(quoi, cibleId) {
     enAttente = null;
     peindre();
   } catch (e) { enAttente = null; peindre(); }
+}
+
+// ──────────────────────────────────────────────── scinder et fusionner
+//  Un seul geste, deux usages : vers un bloc neuf on scinde, vers un bloc
+//  existant on fusionne. Rien à construire deux fois.
+function modaleDeplacer(depuisCles) {
+  const lignes = arbre();
+  const source = lignes.find(l => l.cles === depuisCles);
+  const prises = source.cultures.filter(c => choisies.has(c.id));
+  if (!prises.length) return;
+  const m = prises.reduce((t, c) => t + c.m, 0);
+  const d = $('#modale');
+
+  d.innerHTML =
+    '<div class="mtete" style="flex-direction:column;align-items:stretch;gap:5px">'
+    + '<div style="display:flex;gap:12px;align-items:baseline">'
+    + `<h3>Déplacer ${prises.length} culture${prises.length > 1 ? 's' : ''}</h3>`
+    + '<button type="button" class="sup" id="mclose" aria-label="Fermer" style="margin-left:auto;opacity:1">×</button></div>'
+    + `<p style="margin:0;font:400 13px/1.5 Barlow,sans-serif;color:var(--encre-2)">`
+    + `${ech(prises.map(c => c.nom + (c.sem ? ' S' + String(c.sem).padStart(2, '0') : '')).join(' · '))}`
+    + ` — ${fr(m)} m, ${fr(m * EMPRISE / 100, 1)} ares. Leur placement au champ ne bouge pas.</p></div>`
+
+    + '<button type="button" class="cat" id="neuf" style="background:var(--vert-fond)">'
+    + '<span style="flex:0 0 auto;color:var(--vert);font-size:17px" aria-hidden="true">+</span>'
+    + '<span style="flex:1 1 auto"><span style="font:600 14.5px Barlow,sans-serif">Vers un nouveau bloc</span><br>'
+    + '<span style="font:400 12.5px Barlow,sans-serif;color:var(--encre-2)">C’est ainsi qu’on scinde : une partie des cultures sort dans un bloc neuf.</span></span></button>'
+
+    + '<div style="padding:9px 18px 4px;font:500 10.5px/1 \'Barlow Condensed\',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--encre-2)">Ou vers un bloc existant</div>'
+    + '<div style="max-height:36vh;overflow:auto">'
+    + lignes.filter(l => l.cles !== depuisCles && l.bloc).map(l =>
+        `<button type="button" class="cat" data-vers="${ech(l.cles)}">`
+        + `<span style="flex:1 1 auto;font:500 14.5px Barlow,sans-serif">${ech(l.nom)}</span>`
+        + `<span class="mono" style="flex:0 0 auto;font-size:12.5px">${l.cultures.length} cult.</span>`
+        + `<span class="mono" style="flex:0 0 72px;font-weight:500;font-size:11.5px">${l.sem}</span></button>`).join('')
+    + '</div>'
+    + '<div class="mpied"><p style="margin:0;flex:1 1 200px;font:400 12.5px/1.45 Barlow,sans-serif;color:var(--encre-3)">'
+    + 'Pour <strong>fusionner</strong> deux blocs, coche tout dans l’un et envoie-le dans l’autre. Le bloc vidé reste au catalogue, en bas de liste.</p>'
+    + '<button type="button" class="btn" id="mannul">Annuler</button></div>';
+  d.showModal();
+
+  d.querySelector('#mclose').onclick = () => d.close();
+  d.querySelector('#mannul').onclick = () => d.close();
+  d.querySelector('#neuf').onclick = () => creerBlocEtDeplacer(source, prises, d);
+  d.querySelectorAll('[data-vers]').forEach(b =>
+    b.onclick = () => deplacerVers(b.dataset.vers, prises, d));
+}
+
+async function creerBlocEtDeplacer(source, prises, d) {
+  const nom = prompt('Nom du nouveau bloc', source.nom + ' 2');
+  if (!nom || !nom.trim()) return;
+  try {
+    const [bloc] = await ecrire('groupe_assolement', {nom_court: nom.trim(),
+      description: 'Scindé depuis ' + source.nom}) || [];
+    if (bloc) await deplacerVers(bloc.id, prises, d);
+  } catch (e) {}
+}
+
+async function deplacerVers(versId, prises, d) {
+  try {
+    //  Un seul appel : PostgREST accepte un filtre « in » sur les identifiants.
+    const ids = prises.map(c => c.id).join(',');
+    await ecrire(`culture?id=in.(${ids})`, {groupe_assolement_id: versId}, 'PATCH');
+    d.close();
+    choisies.clear();
+    await charger();
+    peindre();
+  } catch (e) {}
 }
 
 // ───────────────────────────────────────────────────────────────── la modale
