@@ -96,7 +96,7 @@ button{font:inherit}
   min-height:44px;font:inherit;color:var(--encre)}
 .ouvrir:hover .cnom{text-decoration:underline;text-underline-offset:3px}
 .bsel{display:flex;flex-wrap:wrap;gap:10px;align-items:center;
-  padding:9px 18px 9px 24px;border-top:1px solid var(--vert-trait);
+  padding:9px 18px 9px 32px;border-top:1px solid var(--vert-trait);
   background:var(--vert-fond);font-size:13.5px}
 .lb.creux{opacity:.62}
 .lb.creux .nom{font-weight:400}
@@ -104,8 +104,12 @@ button{font:inherit}
   border:0;border-bottom:1px solid var(--trait-2);background:transparent;color:var(--encre)}
 .lb:hover{background:var(--surface-3)}
 .lb[aria-expanded=true]{background:var(--surface-2);box-shadow:inset 3px 0 0 var(--vert)}
-.lc{padding:5px 18px 5px 34px;border-top:1px solid var(--trait-2)}
-.lv{padding:3px 18px 3px 62px;border-top:1px solid var(--trait-2)}
+.lc,.lv{padding:5px 18px;border-top:1px solid var(--trait-2)}
+.lv{padding-top:3px;padding-bottom:3px}
+/* la zone de gauche fait la même largeur aux trois niveaux : c'est ce qui
+   aligne la colonne Semaine sous son en-tête */
+.gauche{flex:0 0 440px;min-width:0;display:flex;gap:9px;align-items:center}
+.retrait{flex:0 0 auto}
 .corps{background:var(--surface-3);border-bottom:1px solid var(--trait)}
 .vcorps{background:var(--surface-2)}
 .nom{font:500 15px/1.2 Barlow,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -182,7 +186,11 @@ summary{padding:11px 18px;cursor:pointer;font:500 14px/1 Barlow,sans-serif;color
 .etat.ko{border-color:var(--alerte);color:var(--alerte)}
 @media(max-width:860px){
   .cols .opt,.lb .opt,.lc .opt,.lv .opt{display:none}
-  .lc{padding-left:22px}.lv{padding-left:40px}.barre{padding-left:40px}
+  /*  La largeur fixe qui aligne la colonne Semaine n'a plus lieu d'être ici :
+      la colonne est masquée, et 440 px ne tiennent pas dans 420. */
+  .gauche{flex:1 1 auto}
+  .retrait{display:none}
+  .barre{padding-left:24px}.bsel{padding-left:24px}
   /*  Au téléphone, le nom et le type prennent leur ligne : ils ne se battent
       plus avec les chiffres pour la même largeur. */
   .lv{flex-wrap:wrap}
@@ -485,6 +493,10 @@ function signaux(lignes) {
 
 // ──────────────────────────────────────────────────────────────── affichage
 function peindre() {
+  //  Repeindre remplace tout le tableau : le temps que le DOM soit vide, la
+  //  page raccourcit et le navigateur ramène le défilement. On le remet où il
+  //  était — trier ne doit pas déplacer ce qu'on regarde.
+  const defilement = window.scrollY;
   const lignes = arbre();
   const T = lignes.reduce((t, l) => ({m: t.m + l.m, plants: t.plants + l.plants,
     caisses: t.caisses + l.caisses, grammes: t.grammes + l.grammes,
@@ -530,12 +542,15 @@ function peindre() {
     + `<button type="button" data-vue="surface" aria-pressed="${surf}">Surface</button>`
     + `<button type="button" data-vue="materiel" aria-pressed="${!surf}">Matériel végétal</button>`
     + '</span></h2>'
-    + '<div class="cols">' + enTete('nom', 'Bloc · culture · variété', '1 1 auto')
-    + enTete('semaine', 'Semaine', droite(72)).replace('<button', '<button class="opt"')
+    + '<div class="cols">' + enTete('nom', 'Bloc · culture · variété', '0 1 440px')
+    + enTete('semaine', 'Semaine', 'flex:0 0 78px;justify-content:flex-start')
+      .replace('<button', '<button class="opt"')
+    + '<span style="flex:1 1 auto"></span>'
     + col + '</div>'
     + (lignes.length ? lignes.map(ligneBloc).join('')
        : '<p class="vide">Aucune culture dans cet horizon.</p>');
 
+  if (window.scrollY !== defilement) window.scrollTo(0, defilement);
   $('#liste').querySelectorAll('[data-vue]').forEach(b =>
     b.onclick = () => { vue = b.dataset.vue; peindre(); });
   $('#liste').querySelectorAll('[data-tri]').forEach(b =>
@@ -576,16 +591,16 @@ function ligneBloc(l) {
             : (l.caisses ? fr(l.caisses) + ' caisses' : '—'))}</span>`;
 
   return `<div><button type="button" class="lb${l.creux ? ' creux' : ''}" data-bloc="${ech(l.cles)}" aria-expanded="${ouvert}">`
-    + `<span style="flex:1 1 auto;min-width:0;display:flex;gap:9px;align-items:center">`
+    + '<span class="gauche">'
     + `<span class="chev" aria-hidden="true" style="${ouvert ? 'transform:rotate(90deg)' : ''}">▸</span>`
     + `<span class="puce" style="background:${teinte}"></span>`
     + `<span class="nom">${ech(l.nom)}</span>`
     + `<span class="mono" style="color:var(--encre-3);font-size:12px">${l.cultures.length} cult.</span>`
-    + (l.sem !== '—' ? `<span class="sem opt">${l.sem}</span>` : '')
     + (l.familles.length > 1 ? `<span class="pil ko">${l.familles.length} familles</span>` : '')
     + (l.creux ? '<span class="mono" style="color:var(--encre-3);font-size:12px">vide</span>' : '')
     + '</span>'
-    + '<span class="opt" style="flex:0 0 72px"></span>'
+    + `<span class="opt" style="flex:0 0 78px">${l.sem !== '—' ? `<span class="sem">${l.sem}</span>` : ''}</span>`
+    + '<span style="flex:1 1 auto"></span>'
     + col + '</button>'
     + (ouvert ? `<div class="corps">`
         + (l.cultures.length ? l.cultures.map(c => ligneCulture(c, l)).join('')
@@ -635,6 +650,7 @@ function ligneCulture(c, l) {
   const att = enAttente && enAttente.cultureId === c.id;
   const prise = choisies.has(c.id);
   return `<div><div class="lc${prise ? ' prise' : ''}">`
+    + '<span class="gauche"><span class="retrait" style="width:14px" aria-hidden="true"></span>'
     + `<label class="coche"><span class="sr">Sortir ${ech(c.nom)} du bloc</span>`
     + `<input type="checkbox" data-coche="${c.id}"${prise ? ' checked' : ''}></label>`
     + `<button type="button" class="ouvrir" data-cult="${c.id}" aria-expanded="${ouvert}">`
@@ -642,10 +658,9 @@ function ligneCulture(c, l) {
     + `<span style="display:flex;flex-direction:column;gap:1px;min-width:0">`
     + `<span class="cnom">${ech(c.nom)}</span>`
     + `<span class="fmt">${ech([c.format, (c.fournisseur || {}).nom].filter(Boolean).join(' · '))}</span>`
-    + '</span>'
-    + `<span class="sem">${c.sem ? 'S' + String(c.sem).padStart(2, '0') : '—'}</span>`
-    + '</button>'
-    + '<span class="opt" style="flex:0 0 72px"></span>'
+    + '</span></button></span>'
+    + `<span class="opt" style="flex:0 0 78px"><span class="sem">${c.sem ? 'S' + String(c.sem).padStart(2, '0') : '—'}</span></span>`
+    + '<span style="flex:1 1 auto"></span>'
     + col + '</div>'
     + (ouvert ? `<div class="vcorps">${c.affectation.map(a => ligneVariete(a, c)).join('')}`
         + (att ? barreAttente(c) : '')
@@ -672,14 +687,15 @@ function ligneVariete(a, c) {
       + nb('', n.quantite, 'plants', 86)
       + `<span class="opt somme" style="flex:0 0 104px">${n.commande}</span>`;
   return `<div class="lv"${retiree ? ' style="opacity:.5"' : ''}>`
-    + '<span style="flex:1 1 auto;min-width:0;display:flex;gap:4px;align-items:center">'
+    + '<span class="gauche" style="gap:4px"><span class="retrait" style="width:44px" aria-hidden="true"></span>'
     + `<button type="button" class="var" data-variete="${a.id}"${retiree ? ' disabled' : ''}>`
     + `<span style="${retiree ? 'text-decoration:line-through' : ''}">${ech(v.nom)}</span>`
     + '<span style="color:var(--encre-3);font-size:10px;margin-left:5px" aria-hidden="true">▾</span></button>'
     + (v.id ? `<label><span class="sr">Type de ${ech(v.nom)}</span>`
         + `<input class="txt" value="${ech(litType(v.note))}" placeholder="type" data-type="${v.id}"></label>` : '')
     + '</span>'
-    + '<span class="opt" style="flex:0 0 72px"></span>' + col
+    + '<span class="opt" style="flex:0 0 78px"></span>'
+    + '<span style="flex:1 1 auto"></span>' + col
     + `<button type="button" class="sup" data-retirer="${a.id}" `
     + `aria-label="${retiree ? 'Remettre' : 'Retirer'} ${ech(v.nom)}">${retiree ? '↺' : '×'}</button>`
     + '</div>';
