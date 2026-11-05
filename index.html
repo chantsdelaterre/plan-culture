@@ -4,228 +4,808 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 :root{
-  --papier:#f3f4f1; --surface:#fff; --surface-2:#e8ebe6; --trait:#d3d8d0;
-  --encre:#232a26; --encre-2:#5d6b62; --alerte:#c1502e; --vert:#4a7c52;
-  --t-brique:#c0725c; --t-teal:#3f9a86; --t-prune:#7d4a62; --t-violet:#8b7fc4;
-  --t-olive:#8a9a52; --t-bleu:#6e8fc0; --t-sauge:#7fa06a; --t-amber:#c9962f;
-  --t-paille:#a8913d; --t-rose2:#c2607f; --t-rose:#d4759a; --t-ardoise:#8d9a94;
+  --papier:#f3f4f1; --surface:#fff; --surface-2:#e8ebe6; --surface-3:#f7f8f6;
+  --trait:#d3d8d0; --trait-2:#e8ebe6;
+  --encre:#232a26; --encre-2:#5d6b62; --encre-3:#8d9a94;
+  --alerte:#c1502e; --alerte-fond:#faf0ec; --alerte-trait:#e3b7a7;
+  --vert:#4a7c52; --vert-fond:#eef6ef; --vert-trait:#a9ccae;
 }
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]){
-  --papier:#15191a; --surface:#1d2224; --surface-2:#252b2d; --trait:#343c3e;
-  --encre:#e8ece9; --encre-2:#9fada6; --alerte:#e0714a; --vert:#7fb98a;
-  --t-brique:#d98f78; --t-teal:#58b8a2; --t-prune:#b3819a; --t-violet:#a89ee0;
-  --t-olive:#a7b86c; --t-bleu:#8fabd8; --t-sauge:#9cbd86; --t-amber:#e0b254;
-  --t-paille:#d4bb68; --t-rose2:#e08aa4; --t-rose:#e894b4; --t-ardoise:#8aa2ae;
+  --papier:#15191a; --surface:#1d2224; --surface-2:#252b2d; --surface-3:#202628;
+  --trait:#343c3e; --trait-2:#2b3234;
+  --encre:#e8ece9; --encre-2:#9fada6; --encre-3:#7d8c86;
+  --alerte:#e0714a; --alerte-fond:#2e2320; --alerte-trait:#5b3a2e;
+  --vert:#7fb98a; --vert-fond:#1e2a21; --vert-trait:#3b5740;
 }}
 *{box-sizing:border-box}
-body{margin:0;padding:24px 16px 60px;background:var(--papier);color:var(--encre);
+body{margin:0;padding:24px 16px 72px;background:var(--papier);color:var(--encre);
   font:400 15px/1.5 Barlow,system-ui,sans-serif}
-.page{max-width:1280px;margin:0 auto}
-h1{font:600 30px/1.1 'Barlow Condensed',sans-serif;margin:0 0 2px}
-.chapo{color:var(--encre-2);margin:0 0 20px;font-size:14px}
-.col{display:grid;grid-template-columns:1fr 390px;gap:20px;align-items:start}
-@media(max-width:940px){.col{grid-template-columns:1fr}}
-.carte{background:var(--surface);border:1px solid var(--trait);border-radius:11px}
-.bloc{border-bottom:1px solid var(--trait);cursor:pointer}
-.bloc:last-child{border-bottom:0}
-.bloc:hover{background:var(--surface-2)}
-.bloc.on{background:var(--surface-2);box-shadow:inset 3px 0 0 var(--alerte)}
-.tete{display:flex;gap:12px;align-items:baseline;padding:11px 14px}
-.tete b{font:600 17px/1.2 Barlow,sans-serif;flex:0 0 118px}
-.fams{flex:1;display:flex;gap:5px;flex-wrap:wrap}
-.pastille{font:500 11px/1 Barlow,sans-serif;padding:3px 7px;border-radius:20px;
-  color:#fff;white-space:nowrap}
-.chiffre{font:500 13px/1 'IBM Plex Mono',monospace;color:var(--encre-2);
-  white-space:nowrap}
-.chiffre b{color:var(--encre);font-weight:600}
-.detail{display:none;padding:0 14px 12px 144px}
-.bloc.on .detail{display:block}
-.cult{display:flex;gap:10px;font:400 13px/1.7 Barlow,sans-serif;color:var(--encre-2)}
-.cult span:first-child{flex:1;color:var(--encre)}
-.cult span{font-family:'IBM Plex Mono',monospace;font-size:12px}
-h2{font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--encre-2);margin:0;padding:13px 14px;
-  border-bottom:1px solid var(--trait)}
-.ligne{display:flex;gap:10px;align-items:baseline;padding:8px 14px;
-  border-bottom:1px solid var(--trait);font-size:14px}
-.ligne:last-child{border-bottom:0}
-.ligne b{flex:1;font-weight:500}
-.ligne .ok{color:var(--vert);font:500 12px 'IBM Plex Mono',monospace}
-.ligne .ko{color:var(--alerte);font:500 12px 'IBM Plex Mono',monospace}
-.ligne .m{font:400 12px 'IBM Plex Mono',monospace;color:var(--encre-2)}
-.vide{padding:18px 14px;color:var(--encre-2);font-size:14px}
-.err{background:var(--surface);border:1px solid var(--alerte);border-radius:11px;
-  padding:18px 20px;color:var(--encre)}
-.err h3{margin:0 0 8px;font:600 17px Barlow,sans-serif;color:var(--alerte)}
-.err code{font:400 13px 'IBM Plex Mono',monospace;background:var(--surface-2);
-  padding:2px 5px;border-radius:4px}
-.err ol{margin:10px 0 0;padding-left:20px;line-height:1.7}
-.nav{display:flex;gap:4px;margin:0 0 18px;flex-wrap:wrap}
+.page{max-width:1352px;margin:0 auto}
+.nav{display:flex;gap:4px;margin:0 0 18px;flex-wrap:wrap;align-items:center}
 .nav a{font:500 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;
   text-transform:uppercase;color:var(--encre-2);text-decoration:none;
   padding:8px 13px;border-radius:7px;border:1px solid transparent}
 .nav a:hover{background:var(--surface-2);color:var(--encre)}
-.nav a[aria-current]{background:var(--surface);border-color:var(--trait);
-  color:var(--encre)}
+.nav a[aria-current]{background:var(--surface);border-color:var(--trait);color:var(--encre)}
+h1{font:600 30px/1.1 'Barlow Condensed',sans-serif;margin:0 0 2px}
+.chapo{color:var(--encre-2);margin:0 0 18px;font-size:14px}
+.carte{background:var(--surface);border:1px solid var(--trait);border-radius:11px;overflow:hidden}
+h2{font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--encre-2);margin:0;padding:11px 18px;
+  border-bottom:1px solid var(--trait);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.tete{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;margin-bottom:16px}
+.tete>div:first-child{flex:1 1 300px;min-width:0}
+select,input{font:400 14px Barlow,sans-serif;color:var(--encre)}
+.sel{background:var(--surface);border:1px solid var(--trait);border-radius:7px;
+  padding:9px 11px;min-height:44px}
+/* totaux */
+.tot{display:flex;flex-wrap:wrap;margin-bottom:16px}
+.tot>div{flex:1 1 130px;padding:12px 16px;border-right:1px solid var(--trait)}
+.tot>div:last-child{border-right:0}
+.tot .et{font:500 10.5px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--encre-2);margin-bottom:5px}
+.tot .va{font:500 21px/1 'IBM Plex Mono',monospace}
+.tot .su{font:400 11.5px/1 Barlow,sans-serif;color:var(--encre-3);margin-top:3px}
+.tot .va small{font-size:13px;color:var(--encre-2)}
+/* à ajuster */
+.sig{display:flex;gap:13px;align-items:flex-start;padding:13px 16px;border-radius:9px;
+  background:var(--papier);border:1px solid var(--trait)}
+.sig.fort{background:var(--alerte-fond);border-color:var(--alerte-trait)}
+.sig h3{margin:0 0 3px;font:600 15.5px/1.25 Barlow,sans-serif}
+.sig p{margin:0;font-size:13.5px;color:var(--encre-2)}
+.sig .act{flex:0 0 auto;display:flex;gap:8px;align-items:center}
+.pil{font:500 10.5px/1 Barlow,sans-serif;padding:3px 7px;border-radius:20px;white-space:nowrap}
+.pil.ko{color:var(--alerte);border:1px solid var(--alerte-trait);background:var(--alerte-fond)}
+.pil.ok{color:var(--vert);border:1px solid var(--vert-trait);background:var(--vert-fond)}
+button{font:inherit}
+.btn{font:500 13px/1 Barlow,sans-serif;color:var(--encre);background:var(--surface);
+  border:1px solid var(--trait);border-radius:7px;padding:0 14px;min-height:44px;cursor:pointer}
+.btn:hover{background:var(--surface-2)}
+.btn.vif{background:var(--vert);border-color:var(--vert);color:#fff;font-weight:600}
+.btn.alrt{background:var(--alerte);border-color:var(--alerte);color:#fff;font-weight:600}
+.btn.fant{background:transparent;border-color:transparent;color:var(--encre-2)}
+.btn.tiret{border-style:dashed;color:var(--encre-2);font-size:12.5px;padding:0 12px}
+.seg{display:inline-flex;border:1px solid var(--trait);border-radius:7px;overflow:hidden}
+.seg button{border:0;cursor:pointer;padding:0 15px;min-height:44px;
+  font:500 12.5px/1 Barlow,sans-serif;background:var(--surface);color:var(--encre-2)}
+.seg button[aria-pressed=true]{background:var(--encre);color:var(--papier)}
+/* tableau */
+.cols,.lb,.lc,.lv{display:flex;gap:10px;align-items:center}
+.cols{padding:7px 18px;background:var(--surface-2);border-bottom:1px solid var(--trait);
+  font:500 10.5px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--encre-2)}
+.lb{width:100%;padding:8px 18px;min-height:44px;text-align:left;cursor:pointer;
+  border:0;border-bottom:1px solid var(--trait-2);background:transparent;color:var(--encre)}
+.lb:hover{background:var(--surface-3)}
+.lb[aria-expanded=true]{background:var(--surface-2);box-shadow:inset 3px 0 0 var(--vert)}
+.lc{padding:5px 18px 5px 34px;border-top:1px solid var(--trait-2)}
+.lv{padding:3px 18px 3px 62px;border-top:1px solid var(--trait-2)}
+.corps{background:var(--surface-3);border-bottom:1px solid var(--trait)}
+.vcorps{background:var(--surface-2)}
+.nom{font:500 15px/1.2 Barlow,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cnom{font:500 14.5px/1.3 Barlow,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fmt{font:400 11.5px/1.3 Barlow,sans-serif;color:var(--encre-3);white-space:nowrap}
+.mono{font:400 13px/1 'IBM Plex Mono',monospace;color:var(--encre-2);text-align:right}
+.mono.fort{font-weight:500;font-size:13.5px;color:var(--encre)}
+.chev{flex:0 0 auto;font-size:11px;line-height:1;color:var(--encre-3);
+  background:transparent;border:0;padding:0 2px;display:inline-block}
+button.chev{cursor:pointer;padding:0 6px;min-height:44px;display:inline-flex;
+  align-items:center;justify-content:center}
+.puce{flex:0 0 auto;width:9px;height:9px;border-radius:3px}
+/* champs */
+.nb{width:100%;text-align:right;background:transparent;border:0;
+  border-bottom:1px dotted var(--encre-3);border-radius:0;padding:5px 4px;
+  font:500 13px 'IBM Plex Mono',monospace;color:var(--encre)}
+.nb:hover{border-bottom-color:var(--encre-2);background:var(--surface)}
+.nb:focus{outline:2px solid var(--vert);outline-offset:1px;background:var(--surface);
+  border-bottom-color:transparent}
+.nb.pale{font-weight:400;color:var(--encre-2)}
+.somme{text-align:right;font:500 13px/1 'IBM Plex Mono',monospace;color:var(--encre-3);
+  padding:5px 4px;display:block}
+.txt{background:transparent;border:0;border-bottom:1px dotted transparent;border-radius:0;
+  padding:3px 4px;font:400 12.5px Barlow,sans-serif;color:var(--encre-2);
+  width:116px;min-width:0;flex:0 1 auto}
+.txt:hover{border-bottom-color:var(--encre-3);background:var(--surface)}
+.txt:focus{outline:2px solid var(--vert);outline-offset:1px;background:var(--surface);color:var(--encre)}
+.txt::placeholder{color:var(--encre-3);opacity:.6}
+.var{background:transparent;border:0;border-bottom:1px dotted transparent;
+  font:400 13.5px Barlow,sans-serif;color:var(--encre-2);padding:3px 2px;
+  cursor:pointer;min-height:44px;max-width:180px;text-align:left}
+.var:hover{color:var(--encre);border-bottom-color:var(--encre-3)}
+.lv .sup{opacity:0}
+.lv:hover .sup,.sup:focus{opacity:1}
+.sup{background:transparent;border:0;cursor:pointer;color:var(--encre-3);
+  padding:0 6px;min-height:44px;font-size:15px;line-height:1}
+.sup:hover{color:var(--alerte)}
+.barre{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:9px 18px 9px 62px;
+  border-top:1px solid var(--alerte-trait);background:var(--alerte-fond);font-size:13.5px}
+.barre b{font-weight:600}
+.vide{padding:18px;color:var(--encre-2);font-size:14px}
+.err{border:1px solid var(--alerte);border-radius:11px;padding:16px 18px;
+  background:var(--surface);margin-bottom:16px}
+.err h3{margin:0 0 6px;font:600 16px Barlow,sans-serif;color:var(--alerte)}
+.err code{font:400 13px 'IBM Plex Mono',monospace;background:var(--surface-2);padding:2px 5px;border-radius:4px}
+/* modale */
+dialog.m{border:1px solid var(--trait);border-radius:12px;padding:0;background:var(--surface);
+  color:var(--encre);width:min(640px,calc(100vw - 32px));box-shadow:0 20px 56px rgba(0,0,0,.26)}
+dialog.m::backdrop{background:rgba(10,14,13,.5)}
+dialog.m h3{margin:0;font:600 19px/1.2 Barlow,sans-serif}
+.mtete{display:flex;gap:12px;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--trait)}
+.mpied{display:flex;gap:10px;align-items:center;padding:12px 18px;border-top:1px solid var(--trait);
+  background:var(--surface-3);flex-wrap:wrap}
+.cat{width:100%;display:flex;gap:10px;align-items:center;padding:8px 18px;min-height:44px;
+  cursor:pointer;border:0;border-bottom:1px solid var(--trait-2);background:transparent;
+  color:var(--encre);text-align:left}
+.cat:hover{background:var(--surface-3)}
+.champs{padding:4px 18px 16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px}
+.champs label{display:flex;flex-direction:column;gap:4px}
+.champs .lab{font:500 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--encre-2)}
+.champs input,.champs select{background:var(--papier);border:1px solid var(--trait);
+  border-radius:7px;padding:10px 11px;font:400 14.5px Barlow,sans-serif;color:var(--encre);min-height:44px}
+.champs .large{grid-column:1/-1}
+summary{padding:11px 18px;cursor:pointer;font:500 14px/1 Barlow,sans-serif;color:var(--vert);
+  min-height:44px;display:flex;align-items:center}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* état d'enregistrement */
+.etat{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:30;
+  padding:9px 16px;border-radius:999px;font:500 13px Barlow,sans-serif;
+  border:1px solid var(--trait);background:var(--surface);color:var(--encre);
+  box-shadow:0 6px 20px rgba(0,0,0,.14);opacity:0;transition:opacity .18s}
+.etat.on{opacity:1}
+.etat.ko{border-color:var(--alerte);color:var(--alerte)}
+@media(max-width:860px){
+  .cols .opt,.lb .opt,.lc .opt,.lv .opt{display:none}
+  .lc{padding-left:22px}.lv{padding-left:40px}.barre{padding-left:40px}
+  /*  Au téléphone, le nom et le type prennent leur ligne : ils ne se battent
+      plus avec les chiffres pour la même largeur. */
+  .lv{flex-wrap:wrap}
+  .lv>span:first-child{flex:1 1 100%;min-width:0}
+  .var{max-width:none}.txt{width:auto;flex:1 1 90px}
+}
 </style>
+
 <div class="page">
 <nav class="nav"><a href="index.html" aria-current="page">Blocs d’assolement</a><a href="carte.html">Carte du parcellaire</a></nav>
-<h1>Blocs d'assolement</h1>
-<p class="chapo" id="chapo">Chargement…</p>
+
+<div class="tete">
+  <div>
+    <h1>Blocs d'assolement</h1>
+    <p class="chapo" id="chapo">Chargement…</p>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <label for="horizon" style="font:500 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--encre-2)">Horizon</label>
+    <select id="horizon" class="sel"></select>
+  </div>
+</div>
+
 <div id="erreur"></div>
-<div class="col">
-  <div class="carte" id="blocs"></div>
-  <div class="carte" id="ou"><h2>Où le poser</h2><div class="vide">Choisis un bloc à gauche.</div></div>
+<div class="carte tot" id="totaux"></div>
+<div class="carte" id="ajuster" style="margin-bottom:16px"></div>
+<div class="carte" id="liste"></div>
 </div>
-</div>
+
+<div class="etat" id="etat" role="status" aria-live="polite"></div>
+
+<dialog class="m" id="modale"></dialog>
+
 <script src="auth.js"></script>
 <script>
-const TEINTE = {'chénopodiacées':'brique','composée':'teal','convolvulacées':'prune',
-  'crucifère':'violet','cucurbitacée':'olive','lilliacée':'bleu','légumineuse':'sauge',
-  'ombellifère':'amber','graminée':'paille','rosacée':'rose2','solanacée':'rose',
-  'labiée':'teal','autre':'ardoise'};
-const MOIS = ['janv','févr','mars','avr','mai','juin','juil','août','sept','oct','nov','déc'];
-
-//  PostgREST ne sert que les schemas exposes. Celui-ci s'appelle production,
-//  d'ou l'en-tete Accept-Profile sur chaque appel.
-//  Session, acces a la base et coin connexion : voir auth.js.
 const {pg, Session} = CDT;
 CDT.coinConnexion(document.querySelector('.nav'));
 
-function jour(d) {
+const $ = s => document.querySelector(s);
+const ech = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+//  L'emprise d'une planche fait 1,70 m : c'est elle qui donne les ares. La
+//  largeur utile, 1,40 m, ne sert qu'au rendement — pas à l'occupation du sol.
+const EMPRISE = 1.70;
+
+const TEINTE = {'chénopodiacées':'#c0725c','composée':'#3f9a86','convolvulacées':'#7d4a62',
+  'crucifère':'#8b7fc4','cucurbitacée':'#8a9a52','lilliacée':'#6e8fc0','légumineuse':'#7fa06a',
+  'ombellifère':'#c9962f','graminée':'#a8913d','rosacée':'#c2607f','solanacée':'#d4759a',
+  'labiée':'#3f9a86','autre':'#8d9a94'};
+
+const fr = (n, dec) => {
+  if (n === null || n === undefined || !isFinite(n)) return '—';
+  const s = (dec ? Number(n).toFixed(dec) : Math.round(n).toString()).replace('.', ',');
+  const [e, d] = s.split(',');
+  return e.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + (d ? ',' + d : '');
+};
+//  Au-delà du million, le chiffre exact est une fausse précision : des graines
+//  se commandent au kilo, pas à l'unité. En dessous c'est un compte de plants,
+//  qui part tel quel chez le pépiniériste.
+const gros = n => !n ? '—' : (n >= 1e6 ? fr(n / 1e6, 1) + ' Mio' : fr(n));
+//  Lire un nombre tapé à la française, virgule et espaces compris.
+const lire = t => {
+  const n = parseFloat(String(t).replace(/\s/g, '').replace(',', '.'));
+  return isFinite(n) ? n : null;
+};
+//  Le chiffre qui compte, c'est la semaine où ça entre au champ.
+const semaine = d => {
   if (!d) return null;
   const x = new Date(d + 'T00:00:00Z');
-  return x.getUTCDate() + ' ' + MOIS[x.getUTCMonth()];
+  x.setUTCDate(x.getUTCDate() + 4 - (x.getUTCDay() || 7));
+  const jan1 = new Date(Date.UTC(x.getUTCFullYear(), 0, 1));
+  return Math.ceil(((x - jan1) / 86400000 + 1) / 7);
+};
+const plage = ss => {
+  const v = ss.filter(Boolean).sort((a, b) => a - b);
+  if (!v.length) return '—';
+  return v[0] === v[v.length - 1] ? 'S' + String(v[0]).padStart(2, '0')
+    : 'S' + String(v[0]).padStart(2, '0') + '→' + String(v[v.length - 1]).padStart(2, '0');
+};
+//  Le type d'une variété vit dans variete.note, en texte libre hérité de
+//  FileMaker : « type : conservation ». On le lit et on le réécrit tel quel.
+const litType = note => {
+  const m = /^\s*type\s*:\s*(.+)$/i.exec(note || '');
+  return m ? m[1].trim() : '';
+};
+const ecritType = t => t.trim() ? 'type : ' + t.trim() : null;
+
+let D = null, vue = 'surface', ouvertB = null, ouvertC = null;
+let enAttente = null;   // { affId, cultureId, metres } : variété retirée, mètres sans destination
+
+// ─────────────────────────────────────────────────────────── état d'écriture
+let minuteur = null;
+function etat(texte, ko) {
+  const e = $('#etat');
+  e.textContent = texte;
+  e.className = 'etat on' + (ko ? ' ko' : '');
+  clearTimeout(minuteur);
+  if (!ko) minuteur = setTimeout(() => { e.className = 'etat'; }, 1600);
 }
-const f0 = n => Math.round(n).toLocaleString('fr-FR');
 
-let D = null, choisi = null;
+async function ecrire(chemin, corps, methode) {
+  if (!Session.compte()) { etat('Connecte-toi pour enregistrer', true); return null; }
+  etat('Enregistrement…');
+  try {
+    const r = await pg(chemin, {corps, methode});
+    etat('Enregistré');
+    return r;
+  } catch (e) {
+    etat(e.message.slice(0, 120), true);
+    throw e;
+  }
+}
 
+// ─────────────────────────────────────────────────────────────────── lecture
 async function charger() {
-  const [groupes, cultures, releves, parcelles] = await Promise.all([
-    pg('groupe_assolement?select=id,nom_court&order=nom_court'),
-    pg('culture?select=id,code,numero_semis,date_semis_prevue,date_plantation_prevue,'
-      + 'debut_recolte_prevu,fin_recolte_prevue,groupe_assolement_id,'
-      + 'legume(nom,famille_botanique(nom,delai_retour_annees)),'
-      + 'affectation(longueur_m,parcelle_id)&limit=2000'),
-    pg('assolement_releve?select=annee,parcelle_id,planche_debut,planche_fin,'
-      + 'est_engrais_vert,famille_botanique(nom)&limit=2000'),
-    //  La vue agrege les 1 498 planches en 31 lignes. L'API plafonne a 1 000
-    //  lignes par requete : les demander une par une donnerait des metres
-    //  faux, et silencieusement.
-    pg('v_parcelle_metrique?select=parcelle_id,nom,ilot,hors_rotation,'
-       + 'nb_planches,longueur_totale_m&order=nom')
+  const [blocs, cultures, campagnes, legumes] = await Promise.all([
+    pg('groupe_assolement?select=id,code,nom_court,description&order=nom_court'),
+    pg('culture?select=id,numero_semis,date_semis_prevue,date_plantation_prevue,'
+      + 'debut_recolte_prevu,groupe_assolement_id,campagne_id,'
+      + 'legume:legume_id(id,nom,famille:famille_botanique_id(nom)),'
+      + 'fournisseur:fournisseur_plants_id(nom),'
+      + 'itineraire:itineraire_id(nom,espacement_sur_rang_cm,graines_par_motte,'
+      + 'materiel:materiel_vegetal_id(nom,nature,nb_par_caisse),'
+      + 'rangs:configuration_rangs_id(nb_rangs)),'
+      + 'affectation(id,longueur_m,ordre_plantation,'
+      + 'variete:variete_id(id,nom,note,pmg,graines_par_gramme))&limit=1000'),
+    pg('campagne?select=id,libelle,date_debut,date_fin,statut&order=libelle'),
+    pg('legume?select=id,nom&order=nom&limit=1000'),
   ]);
 
-  const parc = new Map(parcelles.map(p => [p.parcelle_id,
-    {...p, m: +p.longueur_totale_m, nb: p.nb_planches, hist: new Map()}]));
-  //  Derniere annee ou chaque famille est passee sur la parcelle. Un engrais
-  //  vert ou une luzerne ne compte pas : c'est la coupure, pas un retour.
-  for (const r of releves) {
-    const p = parc.get(r.parcelle_id), f = r.famille_botanique && r.famille_botanique.nom;
-    if (!p || !f || r.est_engrais_vert) continue;
-    p.hist.set(f, Math.max(p.hist.get(f) || 0, r.annee));
-  }
-
-  const blocs = groupes.map(g => ({...g, cultures: [], fams: new Map(), m: 0,
-                                   debut: null, fin: null, ou: new Map()}));
-  const parId = new Map(blocs.map(b => [b.id, b]));
-  const orphelins = {id: null, nom_court: 'Sans bloc', cultures: [], fams: new Map(),
-                     m: 0, debut: null, fin: null, ou: new Map()};
   for (const c of cultures) {
-    const b = parId.get(c.groupe_assolement_id) || orphelins;
-    const f = c.legume && c.legume.famille_botanique;
-    b.cultures.push(c);
-    if (f) b.fams.set(f.nom, f.delai_retour_annees);
-    for (const a of c.affectation || []) {
-      b.m += +a.longueur_m;
-      if (a.parcelle_id) b.ou.set(a.parcelle_id, (b.ou.get(a.parcelle_id) || 0) + +a.longueur_m);
-    }
-    const d = [c.date_semis_prevue, c.date_plantation_prevue].filter(Boolean).sort()[0];
-    const f2 = [c.fin_recolte_prevue, c.debut_recolte_prevu].filter(Boolean).sort().pop();
-    if (d && (!b.debut || d < b.debut)) b.debut = d;
-    if (f2 && (!b.fin || f2 > b.fin)) b.fin = f2;
+    c.miseEnCulture = c.date_plantation_prevue || c.date_semis_prevue;
+    c.sem = semaine(c.miseEnCulture);
+    const it = c.itineraire || {};
+    const nr = (it.rangs || {}).nb_rangs, esp = it.espacement_sur_rang_cm;
+    c.densite = (nr && esp) ? nr * 100 / esp : 0;
+    c.materiel = (it.materiel || {}).nom || null;
+    c.nature = (it.materiel || {}).nature || null;
+    c.parCaisse = (it.materiel || {}).nb_par_caisse || null;
+    c.format = it.nom ? it.nom.replace(/^.*?—\s*/, '') : '';
+    c.m = c.affectation.reduce((s, a) => s + Number(a.longueur_m || 0), 0);
   }
-  if (orphelins.cultures.length) blocs.push(orphelins);
-  blocs.sort((a, b) => b.m - a.m || b.cultures.length - a.cultures.length);
-  D = {blocs, parc, annee: Math.max(...releves.map(r => r.annee))};
+  D = {blocs, cultures, campagnes, legumes,
+       parBloc: new Map(blocs.map(b => [b.id, b]))};
 }
 
-function rendu() {
-  document.getElementById('chapo').textContent =
-    `${D.blocs.length} blocs · ${D.blocs.reduce((s, b) => s + b.cultures.length, 0)} cultures · `
-    + `${f0(D.blocs.reduce((s, b) => s + b.m, 0))} m affectés`;
-  document.getElementById('blocs').innerHTML = D.blocs.map((b, i) => {
-    const fams = [...b.fams.keys()];
-    const cult = b.cultures.slice().sort((x, y) =>
-      (x.legume.nom).localeCompare(y.legume.nom)).map(c =>
-      `<div class="cult"><span>${c.legume.nom}${c.numero_semis ? ' ' + c.numero_semis : ''}</span>`
-      + `<span>${jour(c.date_plantation_prevue || c.date_semis_prevue) || '—'}</span>`
-      + `<span>${f0((c.affectation || []).reduce((s, a) => s + +a.longueur_m, 0))} m</span></div>`).join('');
-    const ou = [...b.ou.entries()].sort((x, y) => y[1] - x[1])
-      .map(([id, m]) => `${D.parc.get(id) ? D.parc.get(id).nom : '?'}\u202f(${f0(m)}\u202fm)`).join(' · ');
-    return `<div class="bloc${i === choisi ? ' on' : ''}" data-i="${i}">
-      <div class="tete"><b>${b.nom_court}</b>
-        <span class="fams">${fams.map(f =>
-          `<i class="pastille" style="background:var(--t-${TEINTE[f] || 'ardoise'})">${f}</i>`).join('')}
-        </span>
-        <span class="chiffre">${b.cultures.length} cult.</span>
-        <span class="chiffre"><b>${f0(b.m)} m</b></span>
-        <span class="chiffre">${b.debut ? jour(b.debut) + ' → ' + (jour(b.fin) || '?') : '—'}</span>
-      </div>
-      <div class="detail">${cult}${ou ? `<div class="cult" style="margin-top:7px">
-        <span style="color:var(--encre-2)">Posé sur&nbsp;: ${ou}</span></div>` : ''}</div>
-    </div>`;
-  }).join('');
+// ──────────────────────────────────────────────────────────────── horizons
+function horizons() {
+  const h = [{id: 'sem10', nom: 'Les 10 prochaines semaines'},
+             {id: 'mois12', nom: 'Les 12 prochains mois'}];
+  for (const c of D.campagnes) h.push({id: 'c' + c.id, nom: 'Campagne ' + c.libelle, campagne: c.id});
+  h.push({id: 'tout', nom: 'Tout'});
+  return h;
+}
+function filtre(id) {
+  const now = new Date();
+  const iso = d => d.toISOString().slice(0, 10);
+  if (id === 'sem10') {
+    const fin = new Date(now); fin.setDate(fin.getDate() + 70);
+    return c => c.miseEnCulture && c.miseEnCulture >= iso(now) && c.miseEnCulture <= iso(fin);
+  }
+  if (id === 'mois12') {
+    const fin = new Date(now); fin.setFullYear(fin.getFullYear() + 1);
+    return c => c.miseEnCulture && c.miseEnCulture >= iso(now) && c.miseEnCulture <= iso(fin);
+  }
+  if (id === 'tout') return () => true;
+  const cid = id.slice(1);
+  return c => c.campagne_id === cid;
 }
 
-function rendrePlaces() {
-  const el = document.getElementById('ou');
-  if (choisi === null) return;
-  const b = D.blocs[choisi], fams = [...b.fams.keys()];
-  const lignes = [...D.parc.values()].filter(p => !p.hors_rotation).map(p => {
-    let pire = null;
-    for (const f of fams) {
-      const a = p.hist.get(f);
-      if (a && (!pire || a > pire.a)) pire = {f, a};
+// ─────────────────────────────────────────────────── regroupement et calculs
+function arbre() {
+  const f = filtre($('#horizon').value);
+  const cultures = D.cultures.filter(f);
+  const parBloc = new Map();
+  for (const c of cultures) {
+    const k = c.groupe_assolement_id || '∅';
+    if (!parBloc.has(k)) parBloc.set(k, []);
+    parBloc.get(k).push(c);
+  }
+  const lignes = [];
+  for (const [k, cs] of parBloc) {
+    const b = D.parBloc.get(k);
+    const fam = new Map();
+    let m = 0, plants = 0, caisses = 0, graines = 0, grammes = 0, convertible = true;
+    const mats = new Set(), sems = [];
+    for (const c of cs) {
+      m += c.m; sems.push(c.sem);
+      if (c.materiel) mats.add(c.materiel);
+      const famille = ((c.legume || {}).famille || {}).nom;
+      if (famille) fam.set(famille, (fam.get(famille) || 0) + 1);
+      const q = c.m * c.densite;
+      if (c.nature === 'graine') {
+        graines += q;
+        for (const a of c.affectation) {
+          const gpg = (a.variete || {}).graines_par_gramme;
+          const qa = Number(a.longueur_m || 0) * c.densite;
+          if (gpg) grammes += qa / gpg; else if (qa) convertible = false;
+        }
+      } else {
+        plants += q;
+        if (c.parCaisse) caisses += q / c.parCaisse;
+      }
     }
-    const delai = pire ? (b.fams.get(pire.f) || 4) : 0;
-    const libre = !pire || (D.annee + 1 - pire.a) >= delai;
-    return {p, pire, libre, assez: p.m >= b.m};
-  }).sort((x, y) => (y.libre - x.libre) || (y.assez - x.assez) || (y.p.m - x.p.m));
-  //  Un gros bloc se pose sur plusieurs parcelles : la question n'est pas
-  //  "laquelle le contient" mais "ai-je assez de place libre en tout".
-  const libreTotal = lignes.filter(l => l.libre).reduce((s, l) => s + l.p.m, 0);
-  el.innerHTML = `<h2>Où poser « ${b.nom_court} » en ${D.annee + 1}</h2>`
-    + `<div class="ligne" style="font-size:13px">
-         <b>${f0(b.m)} m à placer · ${fams.join(', ') || 'sans famille'}</b>
-         <span class="${libreTotal >= b.m ? 'ok' : 'ko'}">${f0(libreTotal)} m libres</span></div>`
-    + lignes.map(l => `<div class="ligne"><b>${l.p.nom}</b>
-        <span class="m">${f0(l.p.m)} m${l.libre && l.assez ? ' · tout' : ''}</span>
-        <span class="${l.libre ? 'ok' : 'ko'}">${l.libre ? 'libre'
-          : l.pire.f + ' en ' + l.pire.a}</span></div>`).join('');
+    lignes.push({bloc: b, cles: k, cultures: cs.sort((a, b2) => b2.m - a.m),
+      nom: b ? b.nom_court : '— sans bloc —', m, plants, caisses, graines, grammes,
+      convertible, familles: [...fam.keys()], mats: [...mats], sem: plage(sems)});
+  }
+  lignes.sort((a, b) => b.m - a.m);
+  return lignes;
 }
 
-document.getElementById('blocs').addEventListener('click', e => {
-  const b = e.target.closest('.bloc'); if (!b) return;
-  choisi = choisi === +b.dataset.i ? null : +b.dataset.i;
-  rendu(); rendrePlaces();
-  if (choisi === null) document.getElementById('ou').innerHTML =
-    '<h2>Où le poser</h2><div class="vide">Choisis un bloc à gauche.</div>';
-});
+// ────────────────────────────────────────────────────────────────── signaux
+function signaux(lignes) {
+  const s = [];
+  const multi = lignes.filter(l => l.familles.length > 1 && l.bloc);
+  if (multi.length) s.push({fort: true, titre:
+    multi.length === 1 ? 'Un bloc mêle deux familles' : multi.length + ' blocs mêlent plusieurs familles',
+    texte: multi.map(l => l.nom + ' (' + l.familles.join(', ') + ')').join(' · '),
+    detail: 'Souvent le signe d’une famille mal renseignée sur un légume, plutôt que d’un bloc à refaire.'});
 
-charger().then(() => rendu()).catch(e => {
-  document.getElementById('chapo').textContent = '';
-  const schema = /schema|does not exist|PGRST106|not find/i.test(e.message || '');
-  document.getElementById('erreur').innerHTML = `<div class="err">
-    <h3>${schema ? 'Le schéma production n’est pas exposé' : 'La base n’a pas répondu'}</h3>
-    ${schema ? `<p>Les tables sont dans le schéma <code>production</code>, que l’API
-      ne sert pas par défaut. Dans Supabase&nbsp;:</p>
-      <ol><li>Settings → <b>Data API</b></li>
-      <li>Champ <b>Exposed schemas</b></li>
-      <li>Ajouter <code>production</code> à côté de <code>public</code></li>
-      <li>Enregistrer, puis recharger cette page</li></ol>`
-      : `<p>Message reçu&nbsp;:</p>`}
-    <p><code>${(e.message || e).toString().slice(0, 300)}</code></p></div>`;
-});
+  const orphelines = lignes.find(l => !l.bloc);
+  if (orphelines) s.push({titre: orphelines.cultures.length + ' culture'
+      + (orphelines.cultures.length > 1 ? 's' : '') + ' sans bloc',
+    texte: orphelines.cultures.map(c => (c.legume || {}).nom).join(', ')
+      + ' — ' + fr(orphelines.m) + ' m',
+    detail: 'Elles ne seront proposées nulle part tant qu’elles flottent.'});
+
+  const sansPmg = new Map();
+  for (const l of lignes) for (const c of l.cultures) {
+    if (c.nature !== 'graine') continue;
+    for (const a of c.affectation) {
+      const v = a.variete;
+      if (v && !v.graines_par_gramme && Number(a.longueur_m)) sansPmg.set(v.id, v.nom);
+    }
+  }
+  if (sansPmg.size) s.push({titre: sansPmg.size + ' variété'
+      + (sansPmg.size > 1 ? 's semées' : ' semée') + ' sans poids de mille graines',
+    texte: [...sansPmg.values()].join(' · '),
+    detail: 'Elles manqueront au bon de commande : sans PMG, pas de conversion en grammes.'});
+
+  const sansType = new Map();
+  for (const l of lignes) for (const c of l.cultures) for (const a of c.affectation) {
+    const v = a.variete;
+    if (v && !litType(v.note)) sansType.set(v.id, v.nom);
+  }
+  if (sansType.size) s.push({titre: sansType.size + ' variété'
+      + (sansType.size > 1 ? 's sans type' : ' sans type'),
+    texte: [...sansType.values()].slice(0, 12).join(' · ')
+      + (sansType.size > 12 ? ' …' : ''),
+    detail: 'Précoce, conservation, batavia… Le type se tape directement sur la ligne de la variété.'});
+  return s;
+}
+
+// ──────────────────────────────────────────────────────────────── affichage
+function peindre() {
+  const lignes = arbre();
+  const T = lignes.reduce((t, l) => ({m: t.m + l.m, plants: t.plants + l.plants,
+    caisses: t.caisses + l.caisses, grammes: t.grammes + l.grammes,
+    cultures: t.cultures + l.cultures.length}), {m: 0, plants: 0, caisses: 0, grammes: 0, cultures: 0});
+
+  $('#chapo').textContent = 'Quelles cultures dans quel bloc, et combien de chaque.';
+  $('#totaux').innerHTML = [
+    ['Ares', fr(T.m * EMPRISE / 100), fr(T.m) + ' m'],
+    ['pl120 · pl180', fr(T.m / 120, 0) + ' · ' + fr(T.m / 180, 0), ''],
+    ['Plants', gros(T.plants), T.caisses ? fr(T.caisses) + ' caisses' : ''],
+    ['Graines', T.grammes ? fr(T.grammes / 1000, 1) + ' <small>kg</small>' : '—', ''],
+    ['Blocs · cultures', lignes.length + ' · ' + T.cultures, ''],
+  ].map(([e, v, s]) => `<div><div class="et">${e}</div><div class="va">${v}</div>`
+    + (s ? `<div class="su">${s}</div>` : '') + '</div>').join('');
+
+  const sg = signaux(lignes);
+  $('#ajuster').innerHTML = !sg.length
+    ? '<h2>À ajuster</h2><p class="vide">Rien ne cloche dans cet horizon.</p>'
+    : `<h2>À ajuster<span class="pil ko">${sg.length} point${sg.length > 1 ? 's' : ''}</span>`
+      + '<span style="margin-left:auto;font:400 12px Barlow,sans-serif;letter-spacing:0;'
+      + 'text-transform:none;color:var(--encre-2)">Ce que l’appli voit et que tu ne vois pas d’un coup d’œil.</span></h2>'
+      + '<div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px">'
+      + sg.map(x => `<div class="sig${x.fort ? ' fort' : ''}"><div style="flex:1 1 auto;min-width:0">`
+        + `<h3>${ech(x.titre)}</h3><p>${ech(x.texte)}</p>`
+        + `<p style="margin-top:4px;color:var(--encre-3);font-size:12.5px">${ech(x.detail)}</p>`
+        + '</div></div>').join('') + '</div>';
+
+  const surf = vue === 'surface';
+  const col = surf
+    ? '<span class="opt" style="flex:0 0 72px;text-align:right">Ares</span>'
+      + '<span class="opt" style="flex:0 0 62px;text-align:right">pl120</span>'
+      + '<span class="opt" style="flex:0 0 62px;text-align:right">pl180</span>'
+      + '<span style="flex:0 0 76px;text-align:right">Mètres</span>'
+    : '<span class="opt" style="flex:0 0 72px;text-align:right">Ares</span>'
+      + '<span class="opt" style="flex:0 0 96px;text-align:right">Matériel</span>'
+      + '<span style="flex:0 0 86px;text-align:right">Quantité</span>'
+      + '<span class="opt" style="flex:0 0 104px;text-align:right">À commander</span>';
+
+  $('#liste').innerHTML =
+    `<h2>${lignes.length} bloc${lignes.length > 1 ? 's' : ''}`
+    + '<span class="seg" style="margin-left:auto">'
+    + `<button type="button" data-vue="surface" aria-pressed="${surf}">Surface</button>`
+    + `<button type="button" data-vue="materiel" aria-pressed="${!surf}">Matériel végétal</button>`
+    + '</span></h2>'
+    + `<div class="cols"><span style="flex:1 1 auto">Bloc · culture · variété</span>`
+    + '<span class="opt" style="flex:0 0 52px;text-align:right">Sem.</span>' + col + '</div>'
+    + (lignes.length ? lignes.map(ligneBloc).join('')
+       : '<p class="vide">Aucune culture dans cet horizon.</p>');
+
+  $('#liste').querySelectorAll('[data-vue]').forEach(b =>
+    b.onclick = () => { vue = b.dataset.vue; peindre(); });
+  brancher();
+}
+
+function chiffres(m, c) {
+  //  Les quatre lectures d'une même quantité, plus ce qu'il y a à commander.
+  const q = c ? m * c.densite : 0;
+  const gpg = null;
+  return {ares: fr(m * EMPRISE / 100, 1), p120: fr(m / 120, 1), p180: fr(m / 180, 1),
+          m: fr(m), quantite: gros(q),
+          commande: !c ? '—' : (c.nature === 'graine' ? '—'
+            : (c.parCaisse ? fr(q / c.parCaisse) + ' caisses' : '—'))};
+}
+
+function ligneBloc(l) {
+  const ouvert = ouvertB === l.cles;
+  const surf = vue === 'surface';
+  const teinte = TEINTE[l.familles[0]] || 'var(--encre-3)';
+  const cm = chiffres(l.m, null);
+  const col = surf
+    ? `<span class="opt mono" style="flex:0 0 72px">${cm.ares}</span>`
+      + `<span class="opt mono" style="flex:0 0 62px">${cm.p120}</span>`
+      + `<span class="opt mono" style="flex:0 0 62px">${cm.p180}</span>`
+      + `<span class="mono fort" style="flex:0 0 76px">${cm.m}</span>`
+    : `<span class="opt mono" style="flex:0 0 72px">${cm.ares}</span>`
+      + `<span class="opt" style="flex:0 0 96px;text-align:right;font:400 11.5px Barlow,sans-serif;color:var(--encre-2)">${ech(l.mats.join(' · ') || '—')}</span>`
+      + `<span class="mono fort" style="flex:0 0 86px">${gros(l.plants + l.graines)}</span>`
+      + `<span class="opt mono" style="flex:0 0 104px">${l.mats.length > 1 ? ''
+          : (l.graines ? (l.convertible ? fr(l.grammes / 1000, 1) + ' kg'
+              : '<span style="color:var(--alerte)">à convertir</span>')
+            : (l.caisses ? fr(l.caisses) + ' caisses' : '—'))}</span>`;
+
+  return `<div><button type="button" class="lb" data-bloc="${ech(l.cles)}" aria-expanded="${ouvert}">`
+    + `<span style="flex:1 1 auto;min-width:0;display:flex;gap:9px;align-items:center">`
+    + `<span class="chev" aria-hidden="true" style="${ouvert ? 'transform:rotate(90deg)' : ''}">▸</span>`
+    + `<span class="puce" style="background:${teinte}"></span>`
+    + `<span class="nom">${ech(l.nom)}</span>`
+    + `<span class="mono" style="color:var(--encre-3);font-size:12px">${l.cultures.length} cult.</span>`
+    + (l.familles.length > 1 ? `<span class="pil ko">${l.familles.length} familles</span>` : '')
+    + '</span>'
+    + `<span class="opt mono" style="flex:0 0 52px;font-size:12px;color:var(--encre-3)">${l.sem}</span>`
+    + col + '</button>'
+    + (ouvert ? `<div class="corps">${l.cultures.map(c => ligneCulture(c, l)).join('')}`
+        + `<div style="padding:8px 18px 11px 34px;border-top:1px solid var(--trait-2);display:flex;gap:9px;flex-wrap:wrap">`
+        + `<button type="button" class="btn tiret" data-ajout-culture="${ech(l.cles)}">+ Ajouter une culture</button>`
+        + '</div></div>' : '') + '</div>';
+}
+
+function ligneCulture(c, l) {
+  const ouvert = ouvertC === c.id;
+  const surf = vue === 'surface';
+  const n = chiffres(c.m, c);
+  //  Plusieurs variétés : la ligne de culture n'est qu'une somme, et la
+  //  quantité se modifie chez elles. Une seule : la ligne EST la variété.
+  const seule = c.affectation.length === 1 ? c.affectation[0] : null;
+  const premiere = seule
+    ? `<label class="opt" style="flex:0 0 72px"><span class="sr">ares ${ech((c.legume||{}).nom||'')}</span>`
+      + `<input class="nb" value="${n.ares}" data-edit="${seule.id}" data-unite="ares"></label>`
+    : `<span class="opt somme" style="flex:0 0 72px" title="Somme des variétés — modifie-les une par une">${n.ares}</span>`;
+
+  const col = surf
+    ? premiere
+      + `<span class="opt somme" style="flex:0 0 62px">${n.p120}</span>`
+      + `<span class="opt somme" style="flex:0 0 62px">${n.p180}</span>`
+      + `<span class="somme" style="flex:0 0 76px">${n.m}</span>`
+    : `<span class="opt somme" style="flex:0 0 72px">${n.ares}</span>`
+      + `<span class="opt" style="flex:0 0 96px;text-align:right;font:400 11.5px Barlow,sans-serif;color:var(--encre-2)">${ech(c.materiel || '—')}</span>`
+      + `<span class="somme" style="flex:0 0 86px">${n.quantite}</span>`
+      + `<span class="opt somme" style="flex:0 0 104px">${n.commande}</span>`;
+
+  const att = enAttente && enAttente.cultureId === c.id;
+  return `<div><div class="lc">`
+    + `<span style="flex:1 1 auto;min-width:0;display:flex;gap:8px;align-items:baseline">`
+    + `<button type="button" class="chev" data-cult="${c.id}" aria-label="Voir les variétés" `
+    + `style="${ouvert ? 'transform:rotate(90deg)' : ''}">▸</button>`
+    + `<span style="display:flex;flex-direction:column;gap:1px;min-width:0">`
+    + `<span class="cnom">${ech((c.legume || {}).nom || '?')}</span>`
+    + `<span class="fmt">${ech([c.format, (c.fournisseur || {}).nom].filter(Boolean).join(' · '))}</span>`
+    + '</span></span>'
+    + `<span class="opt mono" style="flex:0 0 52px;font-weight:500;font-size:12px">${c.sem ? 'S' + String(c.sem).padStart(2, '0') : '—'}</span>`
+    + col + '</div>'
+    + (ouvert ? `<div class="vcorps">${c.affectation.map(a => ligneVariete(a, c)).join('')}`
+        + (att ? barreAttente(c) : '')
+        + `<div style="padding:5px 18px 8px 62px;border-top:1px solid var(--trait-2)">`
+        + `<button type="button" class="btn tiret" data-ajout-var="${c.id}">+ Ajouter une variété</button>`
+        + '</div></div>' : '') + '</div>';
+}
+
+function ligneVariete(a, c) {
+  const surf = vue === 'surface';
+  const m = Number(a.longueur_m || 0);
+  const n = chiffres(m, c);
+  const v = a.variete || {nom: '(sans variété)'};
+  const retiree = enAttente && enAttente.affId === a.id;
+  const nb = (cls, val, quoi, w) => `<label class="${cls.includes('opt') ? 'opt' : ''}" style="flex:0 0 ${w}px">`
+    + `<span class="sr">${quoi} ${ech(v.nom)}</span>`
+    + `<input class="nb ${cls.replace('opt', '').trim()}" value="${val}" data-edit="${a.id}" `
+    + `data-unite="${quoi}"${retiree ? ' disabled' : ''}></label>`;
+  const col = surf
+    ? nb('opt', n.ares, 'ares', 72) + nb('pale opt', n.p120, 'pl120', 62)
+      + nb('pale opt', n.p180, 'pl180', 62) + nb('', n.m, 'm', 76)
+    : `<span class="opt somme" style="flex:0 0 72px">${n.ares}</span>`
+      + `<span class="opt" style="flex:0 0 96px"></span>`
+      + nb('', n.quantite, 'plants', 86)
+      + `<span class="opt somme" style="flex:0 0 104px">${n.commande}</span>`;
+  return `<div class="lv"${retiree ? ' style="opacity:.5"' : ''}>`
+    + '<span style="flex:1 1 auto;min-width:0;display:flex;gap:4px;align-items:center">'
+    + `<button type="button" class="var" data-variete="${a.id}"${retiree ? ' disabled' : ''}>`
+    + `<span style="${retiree ? 'text-decoration:line-through' : ''}">${ech(v.nom)}</span>`
+    + '<span style="color:var(--encre-3);font-size:10px;margin-left:5px" aria-hidden="true">▾</span></button>'
+    + (v.id ? `<label><span class="sr">Type de ${ech(v.nom)}</span>`
+        + `<input class="txt" value="${ech(litType(v.note))}" placeholder="type" data-type="${v.id}"></label>` : '')
+    + '</span>'
+    + '<span class="opt" style="flex:0 0 52px"></span>' + col
+    + `<button type="button" class="sup" data-retirer="${a.id}" `
+    + `aria-label="${retiree ? 'Remettre' : 'Retirer'} ${ech(v.nom)}">${retiree ? '↺' : '×'}</button>`
+    + '</div>';
+}
+
+function barreAttente(c) {
+  const autres = c.affectation.filter(a => a.id !== enAttente.affId);
+  return '<div class="barre">'
+    + `<span style="flex:1 1 220px"><b>${fr(enAttente.metres)} m</b> sans variété depuis que `
+    + `${ech(enAttente.nom)} est retirée. Où vont-ils ?</span>`
+    + (autres.length ? `<button type="button" class="btn" data-rendre="${autres[0].id}">Rendre à ${ech((autres[0].variete || {}).nom || 'l’autre')}</button>` : '')
+    + '<button type="button" class="btn" data-retrancher="1">Retrancher de la culture</button>'
+    + '<button type="button" class="btn fant" data-annuler="1">Annuler</button></div>';
+}
+
+// ─────────────────────────────────────────────────────────────── interactions
+function brancher() {
+  const q = s => $('#liste').querySelectorAll(s);
+  q('[data-bloc]').forEach(b => b.onclick = e => {
+    if (e.target.closest('input,select,.chev,[data-edit]')) return;
+    ouvertB = ouvertB === b.dataset.bloc ? null : b.dataset.bloc; ouvertC = null; peindre();
+  });
+  q('[data-cult]').forEach(b => b.onclick = e => {
+    e.stopPropagation();
+    ouvertC = ouvertC === b.dataset.cult ? null : b.dataset.cult; peindre();
+  });
+  q('[data-edit]').forEach(i => {
+    i.onfocus = () => i.select();
+    i.onkeydown = e => { if (e.key === 'Enter') i.blur(); if (e.key === 'Escape') peindre(); };
+    i.onchange = () => majQuantite(i.dataset.edit, i.dataset.unite, i.value);
+  });
+  q('[data-type]').forEach(i => {
+    i.onfocus = () => i.select();
+    i.onkeydown = e => { if (e.key === 'Enter') i.blur(); };
+    i.onchange = () => majType(i.dataset.type, i.value);
+  });
+  q('[data-variete]').forEach(b => b.onclick = e => { e.stopPropagation(); modaleVariete(b.dataset.variete); });
+  q('[data-retirer]').forEach(b => b.onclick = e => { e.stopPropagation(); retirer(b.dataset.retirer); });
+  q('[data-rendre]').forEach(b => b.onclick = () => resoudre('rendre', b.dataset.rendre));
+  q('[data-retrancher]').forEach(b => b.onclick = () => resoudre('retrancher'));
+  q('[data-annuler]').forEach(b => b.onclick = () => { enAttente = null; peindre(); });
+  q('[data-ajout-var]').forEach(b => b.onclick = e => { e.stopPropagation(); modaleVariete(null, b.dataset.ajoutVar); });
+  q('[data-ajout-culture]').forEach(b => b.onclick = e => {
+    e.stopPropagation();
+    etat('Ajouter une culture : écran à venir', true);
+  });
+}
+
+function trouverAff(id) {
+  for (const c of D.cultures) for (const a of c.affectation) if (a.id === id) return {a, c};
+  return {};
+}
+
+//  Les mètres restent la vérité stockée : taper des ares, des planches ou des
+//  plants revient toujours à écrire une longueur. Le jour où la densité d'un
+//  itinéraire change, les mètres restent vrais et les plants se recalculent.
+async function majQuantite(id, unite, valeur) {
+  const {a, c} = trouverAff(id);
+  if (!a) return;
+  const v = lire(valeur);
+  if (v === null || v < 0) { peindre(); return; }
+  let m = v;
+  if (unite === 'ares') m = v * 100 / EMPRISE;
+  else if (unite === 'pl120') m = v * 120;
+  else if (unite === 'pl180') m = v * 180;
+  else if (unite === 'plants') m = c.densite ? v / c.densite : null;
+  if (m === null || !isFinite(m) || m <= 0) { etat('Quantité impossible ici', true); peindre(); return; }
+  m = Math.round(m * 100) / 100;
+  const avant = a.longueur_m;
+  a.longueur_m = m; c.m = c.affectation.reduce((s, x) => s + Number(x.longueur_m || 0), 0);
+  peindre();
+  try { await ecrire(`affectation?id=eq.${id}`, {longueur_m: m}, 'PATCH'); }
+  catch (e) { a.longueur_m = avant; c.m = c.affectation.reduce((s, x) => s + Number(x.longueur_m || 0), 0); peindre(); }
+}
+
+async function majType(varieteId, texte) {
+  const note = ecritType(texte);
+  for (const c of D.cultures) for (const a of c.affectation)
+    if (a.variete && a.variete.id === varieteId) a.variete.note = note;
+  peindre();
+  try { await ecrire(`variete?id=eq.${varieteId}`, {note}, 'PATCH'); } catch (e) {}
+}
+
+//  Retirer une variété ne la fait pas disparaître tout de suite : ses mètres
+//  restent comptés et la question « où vont-ils » s'affiche. Rien n'est écrit
+//  tant qu'elle n'a pas de réponse.
+function retirer(id) {
+  if (enAttente && enAttente.affId === id) { enAttente = null; peindre(); return; }
+  const {a, c} = trouverAff(id);
+  if (!a) return;
+  enAttente = {affId: id, cultureId: c.id, metres: Number(a.longueur_m || 0),
+               nom: (a.variete || {}).nom || 'cette variété'};
+  ouvertC = c.id;
+  peindre();
+}
+
+async function resoudre(quoi, cibleId) {
+  const att = enAttente; if (!att) return;
+  const {a, c} = trouverAff(att.affId);
+  try {
+    if (quoi === 'rendre' && cibleId) {
+      const {a: autre} = trouverAff(cibleId);
+      const m = Math.round((Number(autre.longueur_m) + att.metres) * 100) / 100;
+      await ecrire(`affectation?id=eq.${cibleId}`, {longueur_m: m}, 'PATCH');
+      autre.longueur_m = m;
+    }
+    await ecrire(`affectation?id=eq.${att.affId}`, undefined, 'DELETE');
+    c.affectation = c.affectation.filter(x => x.id !== att.affId);
+    c.m = c.affectation.reduce((s, x) => s + Number(x.longueur_m || 0), 0);
+    enAttente = null;
+    peindre();
+  } catch (e) { enAttente = null; peindre(); }
+}
+
+// ───────────────────────────────────────────────────────────────── la modale
+async function modaleVariete(affId, cultureIdPourAjout) {
+  const cible = affId ? trouverAff(affId) : {c: D.cultures.find(x => x.id === cultureIdPourAjout)};
+  const c = cible.c; if (!c) return;
+  const legume = c.legume || {};
+  const d = $('#modale');
+  d.innerHTML = '<p class="vide">Chargement du catalogue…</p>';
+  d.showModal();
+
+  let cat = [];
+  try {
+    cat = await pg('variete?select=id,nom,note,pmg,base,unite_vente,actif,'
+      + `fournisseur:fournisseur_id(nom)&legume_id=eq.${legume.id}&order=nom`);
+  } catch (e) { d.innerHTML = `<p class="vide">Catalogue illisible : ${ech(e.message)}</p>`; return; }
+
+  const utilisees = new Set(c.affectation.map(a => (a.variete || {}).id));
+  const fournisseurs = [...new Set(D.cultures.map(x => (x.fournisseur || {}).nom).filter(Boolean))];
+
+  d.innerHTML =
+    `<div class="mtete"><h3>Variété de ${ech(legume.nom || '')}</h3>`
+    + `<span style="color:var(--encre-2);font-size:13px">${cat.length} au catalogue</span>`
+    + '<button type="button" class="sup" id="mclose" aria-label="Fermer" style="margin-left:auto;opacity:1">×</button></div>'
+    + '<div class="cols"><span style="flex:1 1 auto">Variété</span>'
+    + '<span style="flex:0 0 92px">Type</span><span style="flex:0 0 84px">Semencier</span>'
+    + '<span style="flex:0 0 52px;text-align:right">PMG</span>'
+    + '<span style="flex:0 0 72px;text-align:right">Condit.</span></div>'
+    + '<div style="max-height:40vh;overflow:auto">'
+    + (cat.length ? cat.map(v => {
+        const t = litType(v.note);
+        return `<button type="button" class="cat" data-choix="${v.id}">`
+          + '<span style="flex:1 1 auto;display:flex;gap:8px;align-items:baseline">'
+          + `<span style="font:500 14.5px Barlow,sans-serif">${ech(v.nom)}</span>`
+          + (utilisees.has(v.id) ? '<span class="pil ok">déjà dans cette culture</span>' : '')
+          + (v.actif === false ? '<span class="pil ko">inactive</span>' : '') + '</span>'
+          + `<span style="flex:0 0 92px;font:400 ${t ? '13px' : '12px'} Barlow,sans-serif;color:${t ? 'var(--encre-2)' : 'var(--alerte)'}">${t ? ech(t) : 'type ?'}</span>`
+          + `<span style="flex:0 0 84px;font:400 13px Barlow,sans-serif;color:var(--encre-2)">${ech((v.fournisseur || {}).nom || '—')}</span>`
+          + `<span class="mono" style="flex:0 0 52px;font-size:12.5px">${v.pmg ? fr(v.pmg, 3) : '—'}</span>`
+          + `<span class="mono" style="flex:0 0 72px;font-size:12.5px">${v.base ? fr(v.base) + ' ' + ech(v.unite_vente || '') : '—'}</span>`
+          + '</button>';
+      }).join('') : '<p class="vide">Aucune variété pour ce légume.</p>')
+    + '</div>'
+    + '<details><summary>+ Elle n’est pas dans la liste — la créer</summary>'
+    + '<div class="champs">'
+    + '<label><span class="lab">Nom</span><input id="nvNom" type="text"></label>'
+    + '<label><span class="lab">Type</span><input id="nvType" type="text" placeholder="précoce, conservation…"></label>'
+    + '<label><span class="lab">Semencier</span><select id="nvFour"><option value="">—</option>'
+    + fournisseurs.map(f => `<option>${ech(f)}</option>`).join('') + '</select></label>'
+    + '<label><span class="lab">Poids de mille graines</span><input id="nvPmg" type="text" placeholder="3,333"></label>'
+    + '<div class="large" style="display:flex;flex-direction:column;gap:4px">'
+    + '<span class="lab">Prix d’achat et unité de facturation</span>'
+    + '<span style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">'
+    + '<input id="nvPrix" type="text" placeholder="256,00 €" style="flex:0 0 110px">'
+    + '<span style="color:var(--encre-2);font-size:14px">pour</span>'
+    + '<input id="nvQte" type="text" placeholder="1 000" style="flex:0 0 100px;text-align:right">'
+    + '<select id="nvUnite" style="flex:0 0 140px"><option>graines</option><option>plants</option>'
+    + '<option>mottes</option><option>caisses</option><option>g</option><option>kg</option></select></span>'
+    + '<span style="font:400 12.5px/1.45 Barlow,sans-serif;color:var(--encre-3)">'
+    + 'Tu peux acheter 50 graines et être facturé au mille. C’est l’unité de facturation qui rend le prix utilisable, pas la quantité achetée.</span>'
+    + '</div></div></details>'
+    + '<div class="mpied"><p style="margin:0;flex:1 1 200px;font:400 12.5px/1.45 Barlow,sans-serif;color:var(--encre-3)">'
+    + 'Prix, conditionnement et unité vivent par fournisseur : un même légume peut être facturé autrement selon le semencier.</p>'
+    + '<button type="button" class="btn" id="mannul">Annuler</button>'
+    + '<button type="button" class="btn vif" id="mcreer">Créer et choisir</button></div>';
+
+  d.querySelector('#mclose').onclick = () => d.close();
+  d.querySelector('#mannul').onclick = () => d.close();
+  d.querySelectorAll('[data-choix]').forEach(b =>
+    b.onclick = () => choisirVariete(affId, c, b.dataset.choix, d));
+  d.querySelector('#mcreer').onclick = () => creerVariete(affId, c, d);
+}
+
+async function choisirVariete(affId, c, varieteId, d) {
+  try {
+    if (affId) {
+      await ecrire(`affectation?id=eq.${affId}`, {variete_id: varieteId}, 'PATCH');
+    } else {
+      const [cree] = await ecrire('affectation',
+        {culture_id: c.id, variete_id: varieteId, longueur_m: 100}) || [];
+      if (cree) c.affectation.push({id: cree.id, longueur_m: cree.longueur_m, variete: null});
+    }
+    d.close();
+    await charger(); peindre();
+  } catch (e) { /* ecrire a déjà dit pourquoi */ }
+}
+
+async function creerVariete(affId, c, d) {
+  const nom = d.querySelector('#nvNom').value.trim();
+  if (!nom) { etat('Il faut au moins un nom', true); return; }
+  const pmg = lire(d.querySelector('#nvPmg').value);
+  const corps = {nom, legume_id: (c.legume || {}).id,
+                 note: ecritType(d.querySelector('#nvType').value)};
+  if (pmg && pmg > 0) { corps.pmg = pmg; corps.pmg_mis_a_jour_le = new Date().toISOString(); }
+  try {
+    const [v] = await ecrire('variete', corps) || [];
+    if (v) await choisirVariete(affId, c, v.id, d);
+  } catch (e) {}
+}
+
+// ───────────────────────────────────────────────────────────────────── bord
+(async () => {
+  try {
+    await charger();
+    const h = horizons();
+    const prep = D.campagnes.find(c => c.statut === 'preparation');
+    $('#horizon').innerHTML = h.map(x =>
+      `<option value="${x.id}"${prep && x.campagne === prep.id ? ' selected' : ''}>${ech(x.nom)}</option>`).join('');
+    $('#horizon').onchange = () => { ouvertB = null; ouvertC = null; enAttente = null; peindre(); };
+    peindre();
+    if (!Session.compte())
+      etat('Lecture seule — connecte-toi pour modifier', true);
+  } catch (e) {
+    $('#chapo').textContent = '';
+    $('#erreur').innerHTML = '<div class="err"><h3>La page n’a pas pu lire la base</h3>'
+      + `<p>${e.code ? 'Code ' + e.code + '. ' : ''}${ech(String(e.message)).slice(0, 400)}</p>`
+      + '<p>Si c’est un <code>404</code>, une migration manque. Si c’est un <code>401</code>, '
+      + 'la clé publique a changé dans Supabase.</p></div>';
+  }
+})();
 </script>
