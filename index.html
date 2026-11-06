@@ -277,7 +277,10 @@ const litType = note => {
 };
 const ecritType = t => t.trim() ? 'type : ' + t.trim() : null;
 
-let D = null, vue = 'surface', ouvertB = null, ouvertC = null;
+let D = null, vue = 'surface', ouvertB = null;
+//  Un ensemble, pas une seule : on compare deux cultures d'un bloc en les
+//  ouvrant côte à côte plutôt qu'en faisant l'aller-retour.
+let ouvertC = new Set();
 //  Le tri vaut pour les deux niveaux à la fois : les blocs entre eux et les
 //  cultures dans chaque bloc. Un seul réglage, cohérent partout.
 let tri = 'metres', ordre = -1;  // -1 : décroissant
@@ -626,7 +629,7 @@ function barreSelection(l) {
 }
 
 function ligneCulture(c, l) {
-  const ouvert = ouvertC === c.id;
+  const ouvert = ouvertC.has(c.id);
   const surf = vue === 'surface';
   const n = chiffres(c.m, c);
   //  Plusieurs variétés : la ligne de culture n'est qu'une somme, et la
@@ -716,11 +719,13 @@ function brancher() {
   const q = s => $('#liste').querySelectorAll(s);
   q('[data-bloc]').forEach(b => b.onclick = e => {
     if (e.target.closest('input,select,[data-edit]')) return;
-    ouvertB = ouvertB === b.dataset.bloc ? null : b.dataset.bloc; ouvertC = null; peindre();
+    ouvertB = ouvertB === b.dataset.bloc ? null : b.dataset.bloc; ouvertC.clear(); peindre();
   });
   q('[data-cult]').forEach(b => b.onclick = e => {
     e.stopPropagation(); e.preventDefault();
-    ouvertC = ouvertC === b.dataset.cult ? null : b.dataset.cult; peindre();
+    const id = b.dataset.cult;
+    if (ouvertC.has(id)) ouvertC.delete(id); else ouvertC.add(id);
+    peindre();
   });
   q('[data-edit]').forEach(i => {
     i.onfocus = () => i.select();
@@ -795,7 +800,7 @@ function retirer(id) {
   if (!a) return;
   enAttente = {affId: id, cultureId: c.id, metres: Number(a.longueur_m || 0),
                nom: (a.variete || {}).nom || 'cette variété'};
-  ouvertC = c.id;
+  ouvertC.add(c.id);
   peindre();
 }
 
@@ -990,7 +995,7 @@ async function creerVariete(affId, c, d) {
     const prep = D.campagnes.find(c => c.statut === 'preparation');
     $('#horizon').innerHTML = h.map(x =>
       `<option value="${x.id}"${prep && x.campagne === prep.id ? ' selected' : ''}>${ech(x.nom)}</option>`).join('');
-    $('#horizon').onchange = () => { ouvertB = null; ouvertC = null; enAttente = null; peindre(); };
+    $('#horizon').onchange = () => { ouvertB = null; ouvertC.clear(); enAttente = null; peindre(); };
     peindre();
     if (!Session.compte())
       etat('Lecture seule — connecte-toi pour modifier', true);
