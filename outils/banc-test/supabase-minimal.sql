@@ -10,6 +10,11 @@ begin
     create role anon nologin; end if;
   if not exists (select 1 from pg_roles where rolname = 'authenticated') then
     create role authenticated nologin; end if;
+  --  service_role : le role des Edge Functions, qui contourne RLS. Le socle
+  --  lui accorde l'usage du schema des la premiere migration ; sans lui, la
+  --  reconstruction depuis vide s'arrete des la ligne 223 du socle.
+  if not exists (select 1 from pg_roles where rolname = 'service_role') then
+    create role service_role nologin bypassrls; end if;
 end $$;
 
 --  Un leurre qui tient la place de la paie du Suivi des temps, pour verifier
